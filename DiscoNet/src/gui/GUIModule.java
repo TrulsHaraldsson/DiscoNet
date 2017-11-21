@@ -19,12 +19,6 @@ import java.util.Map;
  * @author truls
  */
 public class GUIModule implements TimeListener, ScoreListener, GameStateListener{
-    
-    public GUIModule(TimeEmitter timeEmitter, ScoreEmitter scoreEmitter, GameStateEmitter gameStateEmitter){
-        timeEmitter.addTimeListener(this);
-        scoreEmitter.addScoreListener(this);
-        gameStateEmitter.addGameStateListener(this);
-    }
 
     @Override
     public void notifyTime(float time) {
@@ -39,6 +33,18 @@ public class GUIModule implements TimeListener, ScoreListener, GameStateListener
     @Override
     public void notifyGameState(GameState state) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public TimeListener getTimeListener(){
+        return this;
+    }
+    
+    public ScoreListener getScoreListener(){
+        return this;
+    }
+    
+    public GameStateListener getGameStateListener(){
+        return this;
     }
     
 }

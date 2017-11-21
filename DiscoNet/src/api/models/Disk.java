@@ -9,6 +9,17 @@ package api.models;
  *
  * @author truls
  */
-public class Disk {
+public interface Disk {
     
+    /**
+     * Return the radius of this disk
+     * @return radius
+     */
+    float getRadius();
+    
+    /**
+     * Return the reward associated with this disk
+     * @return reward
+     */
+    int reward();
 }

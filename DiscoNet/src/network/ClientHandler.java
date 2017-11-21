@@ -9,6 +9,10 @@ import api.DiskStateEmitter;
 import api.DiskStateListener;
 import api.GameStateEmitter;
 import api.GameStateListener;
+import api.MoveDirection;
+import api.Player;
+import api.PlayerMoveEmitter;
+import api.PlayerMoveListener;
 import api.ScoreEmitter;
 import api.ScoreListener;
 import api.TimeEmitter;
@@ -21,7 +25,7 @@ import com.jme3.network.MessageListener;
  *
  * @author truls
  */
-public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, MessageListener<Client>{
+public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, MessageListener<Client>{
     
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
@@ -45,6 +49,11 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
 
     @Override
     public void messageReceived(Client source, Message m) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void notifyPlayerMove(Player player, MoveDirection direction, boolean isPressed) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

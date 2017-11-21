@@ -13,18 +13,16 @@ import api.GameStateEmitter;
 import api.GameStateListener;
 import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
+import com.jme3.app.SimpleApplication;
+import gui.GUIModule;
 import java.util.List;
+import network.ClientHandler;
 
 /**
  *
  * @author truls
  */
-public class ClientModule implements GameStateListener, DiskStateListener, PlayerMoveEmitter {
-    
-    public ClientModule(GameStateEmitter gameStateEmitter, DiskStateEmitter diskStateEmitter){
-        gameStateEmitter.addGameStateListener(this);
-        diskStateEmitter.addDiskStateListener(this);
-    }
+public class ClientModule extends SimpleApplication implements GameStateListener, DiskStateListener, PlayerMoveEmitter {
 
     @Override
     public void notifyGameState(GameState state) {
@@ -39,6 +37,15 @@ public class ClientModule implements GameStateListener, DiskStateListener, Playe
     @Override
     public void addPlayerMoveListener(PlayerMoveListener playerMoveListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public PlayerMoveEmitter getPlayerEmmitEmitter(){
+        return this;
+    }
+
+    @Override
+    public void simpleInitApp() {
+        
     }
     
 }
