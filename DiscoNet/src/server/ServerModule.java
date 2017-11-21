@@ -17,12 +17,13 @@ import api.ScoreEmitter;
 import api.ScoreListener;
 import api.TimeEmitter;
 import api.TimeListener;
+import com.jme3.app.SimpleApplication;
 
 /**
  *
  * @author truls
  */
-public class ServerModule implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener{
+public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener{
     
     public ServerModule(PlayerMoveEmitter playerMoveEmitter){
         playerMoveEmitter.addPlayerMoveListener(this);
@@ -50,6 +51,11 @@ public class ServerModule implements GameStateEmitter, DiskStateEmitter, ScoreEm
 
     @Override
     public void notifyPlayerMove(Player player, MoveDirection direction, boolean isPressed) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void simpleInitApp() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

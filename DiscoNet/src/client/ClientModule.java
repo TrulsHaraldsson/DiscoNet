@@ -15,6 +15,7 @@ import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import com.jme3.app.SimpleApplication;
 import gui.GUIModule;
+import java.util.ArrayList;
 import java.util.List;
 import network.ClientHandler;
 
@@ -24,6 +25,8 @@ import network.ClientHandler;
  */
 public class ClientModule extends SimpleApplication implements GameStateListener, DiskStateListener, PlayerMoveEmitter {
 
+    ArrayList<PlayerMoveListener> playerMoveListeners = new ArrayList<>();
+    
     @Override
     public void notifyGameState(GameState state) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -36,10 +39,10 @@ public class ClientModule extends SimpleApplication implements GameStateListener
 
     @Override
     public void addPlayerMoveListener(PlayerMoveListener playerMoveListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        playerMoveListeners.add(playerMoveListener);
     }
     
-    public PlayerMoveEmitter getPlayerEmmitEmitter(){
+    public PlayerMoveEmitter getPlayerMoveEmitter(){
         return this;
     }
 

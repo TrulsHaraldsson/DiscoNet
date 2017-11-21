@@ -47,4 +47,24 @@ public class ServerHandler implements PlayerMoveEmitter, GameStateListener, Scor
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public PlayerMoveEmitter getPlayerMoveEmitter(){
+        return this;
+    }
+
+    public DiskStateListener getDiskStateListener() {
+        return this;
+    }
+
+    public GameStateListener getGameStateListener() {
+        return this;
+    }
+
+    public TimeListener getTimeListener() {
+        return this;
+    }
+
+    public ScoreListener getScoreListener() {
+        return this;
+    }
+    
 }
