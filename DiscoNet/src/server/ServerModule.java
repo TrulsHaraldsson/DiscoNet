@@ -25,10 +25,6 @@ import com.jme3.app.SimpleApplication;
  */
 public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener{
     
-    public ServerModule(PlayerMoveEmitter playerMoveEmitter){
-        playerMoveEmitter.addPlayerMoveListener(this);
-    }
-    
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -57,6 +53,10 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     @Override
     public void simpleInitApp() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    PlayerMoveListener getPlayerMoveListener() {
+        return this;
     }
     
 }
