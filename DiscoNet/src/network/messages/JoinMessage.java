@@ -5,10 +5,13 @@
  */
 package network.messages;
 
+import com.jme3.network.serializing.Serializable;
+
 /**
  *
  * @author hannes
  */
+@Serializable
 public class JoinMessage extends AbstractClientMessage {
     public JoinMessage(){
         super(null);

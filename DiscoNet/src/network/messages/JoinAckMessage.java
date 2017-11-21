@@ -6,11 +6,13 @@
 package network.messages;
 
 import api.Player;
+import com.jme3.network.serializing.Serializable;
 
 /**
  *
  * @author hannes
  */
+@Serializable
 public class JoinAckMessage extends AbstractTCPMessage {
     private final Player newPlayer;
     private final boolean joined;
@@ -20,7 +22,6 @@ public class JoinAckMessage extends AbstractTCPMessage {
      * @param newPlayer
      */
     public JoinAckMessage(Player newPlayer){
-        super();
         this.newPlayer = newPlayer;
         this.joined = true;
     }
@@ -29,7 +30,6 @@ public class JoinAckMessage extends AbstractTCPMessage {
      * Join is not possible
      */
     public JoinAckMessage(){
-        super();
         this.newPlayer = null;
         this.joined = false;
     }

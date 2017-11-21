@@ -52,7 +52,7 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
 
     @Override
     public void simpleInitApp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO
     }
 
     PlayerMoveListener getPlayerMoveListener() {

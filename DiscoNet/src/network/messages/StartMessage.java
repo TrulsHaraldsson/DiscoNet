@@ -5,7 +5,6 @@
  */
 package network.messages;
 
-import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -13,10 +12,9 @@ import com.jme3.network.serializing.Serializable;
  * @author hannes
  */
 @Serializable
-public class AbstractTCPMessage extends AbstractMessage {
-    
-    public AbstractTCPMessage(){
-        this.setReliable(true);
+public class StartMessage extends AbstractTCPMessage {
+
+    public StartMessage() {
     }
     
 }

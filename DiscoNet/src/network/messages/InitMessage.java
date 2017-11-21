@@ -5,11 +5,18 @@
  */
 package network.messages;
 
+import com.jme3.network.serializing.Serializable;
+
 
 /**
  *
  * @author hannes
  */
+@Serializable
 public class InitMessage extends AbstractTCPMessage {
+
+    public InitMessage() {
+    }
+    // TODO: Send out data of all the other players? or do that when they join(earlier)?
     
 }
