@@ -10,7 +10,7 @@ import api.DiskStateListener;
 import api.GameStateEmitter;
 import api.GameStateListener;
 import api.MoveDirection;
-import api.Player;
+import api.models.Player;
 import api.PlayerMoveListener;
 import api.ScoreEmitter;
 import api.ScoreListener;

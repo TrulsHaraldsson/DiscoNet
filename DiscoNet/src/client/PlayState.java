@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package states;
+package client;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
@@ -12,7 +12,7 @@ import com.jme3.app.state.BaseAppState;
  *
  * @author truls
  */
-public class SetupState extends BaseAppState{
+public class PlayState extends BaseAppState {
 
     @Override
     protected void initialize(Application app) {

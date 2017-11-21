@@ -5,7 +5,7 @@
  */
 package network.messages;
 
-import api.Player;
+import api.models.Player;
 
 /**
  *

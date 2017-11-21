@@ -5,6 +5,8 @@
  */
 package api;
 
+import api.models.Player;
+
 /**
  *
  * @author truls

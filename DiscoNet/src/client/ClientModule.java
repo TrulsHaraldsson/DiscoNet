@@ -29,14 +29,29 @@ public class ClientModule extends SimpleApplication implements
     ArrayList<PlayerMoveListener> playerMoveListeners = new ArrayList<>();
     private final GUINode gui = new GUINode();
     
+    private final PlayState playState = new PlayState();
+    private final EndState endState = new EndState();
+    private final SetupState setupState = new SetupState();
+    
     @Override
     public void notifyGameState(GameState state) {
         gui.notifyGameState(state);
+        switch(state){
+            case PLAY:
+                playState.setEnabled(true);
+                break;
+            case END:
+                endState.setEnabled(true);
+                break;
+            case SETUP:
+                setupState.setEnabled(true);
+                break;
+        }
     }
 
     @Override
     public void notifyDiskState(List<DiskState> diskStates) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        playState.notifyDiskState(diskStates);
     }
     
     @Override
@@ -57,8 +72,17 @@ public class ClientModule extends SimpleApplication implements
     @Override
     public void simpleInitApp() {
         gui.initGUI(assetManager, settings);
-        
         guiNode.attachChild(gui);
+        
+        flyCam.setMoveSpeed(200f);
+        
+        stateManager.attach(playState);
+        stateManager.attach(endState);
+        stateManager.attach(setupState);
+        
+        flyCam.setEnabled(false);
+        
+        setDisplayStatView(false);
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package api;
 
+import api.models.Player;
 import com.jme3.math.Vector3f;
 
 /**

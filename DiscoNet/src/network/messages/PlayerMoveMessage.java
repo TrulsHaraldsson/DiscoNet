@@ -6,7 +6,7 @@
 package network.messages;
 
 import api.MoveDirection;
-import api.Player;
+import api.models.Player;
 
 /**
  *
