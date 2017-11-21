@@ -20,6 +20,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
+import com.jme3.network.serializing.Serializer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,8 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
     private Server server;
     
     public ServerHandler(){
+        // init messages
+        NetworkUtils.initSerializables();
         initServer();
         
     }
@@ -80,6 +83,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         if (m instanceof JoinMessage){
             // TODO: send message back to client about if it can join or not.
         } else if (m instanceof PlayerMoveMessage){
+            // send to simple application
             serverModule.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {

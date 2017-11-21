@@ -5,19 +5,41 @@
  */
 package api;
 
+import api.models.Disk;
 import com.jme3.math.Vector3f;
 
 /**
  *
  * @author truls
  */
-public interface DiskState {
+public class DiskState {
+    private final Vector3f pos;
+    private final Vector3f velocity;
+    private final Vector3f acceleration;
+    private final Player player;
+
+    public DiskState(Disk d, Player p) {
+        this.pos = null;
+        this.velocity = null;
+        this.acceleration = null;
+        this.player = p;
+    }
     
-    Vector3f getPosition();
     
-    Vector3f getVelocity();
     
-    Vector3f getAcceleration();
+    public Vector3f getPosition(){
+        return pos;
+    }
     
-    Player getPlayer();
+    public Vector3f getVelocity(){
+        return velocity;
+    }
+    
+    public Vector3f getAcceleration(){
+        return acceleration;
+    }
+    
+    public Player getPlayer(){
+        return player;
+    }
 }

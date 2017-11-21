@@ -13,10 +13,9 @@ import com.jme3.network.serializing.Serializable;
  * @author hannes
  */
 @Serializable
-public class AbstractTCPMessage extends AbstractMessage {
-    
-    public AbstractTCPMessage(){
-        this.setReliable(true);
+public class AbstractUDPMessage extends AbstractMessage {
+    public AbstractUDPMessage(){
+        this.setReliable(false);
     }
     
 }
