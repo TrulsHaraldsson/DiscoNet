@@ -23,6 +23,7 @@ public class JoinAckMessage extends AbstractMessage {
     public JoinAckMessage(Player newPlayer){
         this.newPlayer = newPlayer;
         this.joined = true;
+        this.setReliable(true);
     }
     
     /**

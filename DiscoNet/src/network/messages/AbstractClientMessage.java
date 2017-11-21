@@ -18,6 +18,7 @@ public class AbstractClientMessage extends AbstractMessage {
     
     public AbstractClientMessage(Player player){
         this.player = player;
+        this.setReliable(true);
     }
             
     
