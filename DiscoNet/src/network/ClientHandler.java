@@ -20,31 +20,37 @@ import api.TimeListener;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
+import java.util.ArrayList;
 
 /**
  *
  * @author truls
  */
 public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, MessageListener<Client>{
-     
+    
+    private final ArrayList<GameStateListener> gameStateListeners = new ArrayList<>();
+    private final ArrayList<DiskStateListener> diskStateListeners = new ArrayList<>();
+    private final ArrayList<ScoreListener> scoreListeners = new ArrayList<>();
+    private final ArrayList<TimeListener> timeListeners = new ArrayList<>();
+    
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        gameStateListeners.add(gameStateListener);
     }
 
     @Override
     public void addDiskStateListener(DiskStateListener diskStateListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        diskStateListeners.add(diskStateListener);
     }
 
     @Override
     public void addScoreListener(ScoreListener scoreListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        scoreListeners.add(scoreListener);
     }
 
     @Override
     public void addTimeListener(TimeListener timeListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        timeListeners.add(timeListener);
     }
 
     @Override
@@ -56,25 +62,9 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     public void notifyPlayerMove(Player player, MoveDirection direction, boolean isPressed) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     } 
-     
-    public GameStateEmitter getGameStateEmitter(){
-        return this;
-    }
-    
-    public DiskStateEmitter getDiskStateEmitter(){
-        return this;
-    }
-    
-    public ScoreEmitter getScoreEmitter(){
-        return this;
-    }
-    
-    public TimeEmitter getTimeEmitter(){
-        return this;
-    }
-    
+
     public PlayerMoveListener getPlayerMoveListener(){
         return this;
     }
-   
+    
 }
