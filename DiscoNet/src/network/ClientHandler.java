@@ -26,7 +26,7 @@ import com.jme3.network.MessageListener;
  * @author truls
  */
 public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, MessageListener<Client>{
-    
+     
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -55,6 +55,26 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     @Override
     public void notifyPlayerMove(Player player, MoveDirection direction, boolean isPressed) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    } 
+     
+    public GameStateEmitter getGameStateEmitter(){
+        return this;
     }
     
+    public DiskStateEmitter getDiskStateEmitter(){
+        return this;
+    }
+    
+    public ScoreEmitter getScoreEmitter(){
+        return this;
+    }
+    
+    public TimeEmitter getTimeEmitter(){
+        return this;
+    }
+    
+    public PlayerMoveListener getPlayerMoveListener(){
+        return this;
+    }
+   
 }
