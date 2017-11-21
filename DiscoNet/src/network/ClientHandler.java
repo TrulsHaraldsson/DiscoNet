@@ -23,6 +23,7 @@ import com.jme3.network.Network;
 import java.io.IOException;
 import java.util.ArrayList;
 import static network.NetworkUtils.*;
+import network.messages.HelloWorldMessage;
 import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
@@ -33,22 +34,29 @@ import network.messages.PlayerMoveMessage;
  */
 public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, MessageListener<Client>{
     
-    private final ArrayList<GameStateListener> gameStateListeners = new ArrayList<>();
-    private final ArrayList<DiskStateListener> diskStateListeners = new ArrayList<>();
-    private final ArrayList<ScoreListener> scoreListeners = new ArrayList<>();
-    private final ArrayList<TimeListener> timeListeners = new ArrayList<>();
+    private final ArrayList<GameStateListener> gameStateListeners;
+    private final ArrayList<DiskStateListener> diskStateListeners;
+    private final ArrayList<ScoreListener> scoreListeners;
+    private final ArrayList<TimeListener> timeListeners;
     
     Client myClient;
     
+    @SuppressWarnings("LeakingThisInConstructor")
     public ClientHandler(){
         connectToServer();
         
-/*        myClient.addMessageListener(new ClientHandler(), JoinMessage.class);
-        myClient.addMessageListener(new ClientHandler(), JoinAckMessage.class);
-        myClient.addMessageListener(new ClientHandler(), PlayerMoveMessage.class);       
+        gameStateListeners = new ArrayList<>();
+        diskStateListeners = new ArrayList<>();
+        scoreListeners = new ArrayList<>();
+        timeListeners = new ArrayList<>();
+/*        
+        myClient.addMessageListener(this, JoinMessage.class);
+        myClient.addMessageListener(this, JoinAckMessage.class);
+        myClient.addMessageListener(this, PlayerMoveMessage.class);       
 */
+        myClient.addMessageListener(this, HelloWorldMessage.class);
     }
-    
+
     @SuppressWarnings("CallToPrintStackTrace")
     private void connectToServer(){
            try{
@@ -57,7 +65,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             myClient.start();
         }catch(IOException ex){
             ex.printStackTrace();
-        }      
+        }
     }
     
     @Override
@@ -84,16 +92,18 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     public void messageReceived(Client source, Message m) {
         if(m instanceof JoinMessage){
             JoinMessage joinMessage = (JoinMessage) m;
-            System.out.println("Client # " + source.getId() + " received : " + joinMessage.toString());
-            
-        }
-        if(m instanceof PlayerMoveMessage){
+            System.out.println("Client # " + source.getId() + " received : " + joinMessage.toString());            
+        } else if(m instanceof PlayerMoveMessage){
             PlayerMoveMessage playerMoveMessage = (PlayerMoveMessage) m;
             System.out.println("Move message received");
-        }
-        if(m instanceof JoinAckMessage){
+        } else if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
             System.out.println("Join ack message received");
+        } else if(m instanceof HelloWorldMessage){
+            HelloWorldMessage helloWorldMessage = (HelloWorldMessage) m;
+            System.out.println("Message received : " + helloWorldMessage.getString());
+        }else {
+            System.out.println("This message does not exist!");
         }
     }
 
