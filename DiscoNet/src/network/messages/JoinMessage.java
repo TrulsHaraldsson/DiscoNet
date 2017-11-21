@@ -5,14 +5,12 @@
  */
 package network.messages;
 
-import api.Player;
-
 /**
  *
  * @author hannes
  */
 public class JoinMessage extends AbstractClientMessage {
-    public JoinMessage(Player player){
-        super(player);
+    public JoinMessage(){
+        super(null);
     }
 }
