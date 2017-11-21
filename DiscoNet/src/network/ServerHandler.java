@@ -9,22 +9,91 @@ import api.DiskState;
 import api.DiskStateListener;
 import api.GameState;
 import api.GameStateListener;
+import api.MoveDirection;
 import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreListener;
 import api.TimeListener;
+import com.jme3.app.SimpleApplication;
+import com.jme3.network.HostedConnection;
+import com.jme3.network.Message;
+import com.jme3.network.MessageListener;
+import com.jme3.network.Network;
+import com.jme3.network.Server;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import network.messages.JoinMessage;
+import network.messages.PlayerMoveMessage;
+import server.ServerModule;
 
 /**
- *
+ * Handles all the networking done by server.
+ * Emits what has been received.
+ *  
  * @author truls
  */
-public class ServerHandler implements PlayerMoveEmitter, GameStateListener, ScoreListener, TimeListener, DiskStateListener {
+public class ServerHandler implements MessageListener<HostedConnection>, PlayerMoveEmitter, GameStateListener, ScoreListener, TimeListener, DiskStateListener {
+    private ServerModule serverModule;
+    
+    private Server server;
+    
+    public ServerHandler(){
+        initServer();
+        
+    }
+    
+    
+    @SuppressWarnings("CallToPrintStackTrace")
+    private void initServer(){
+        try {
+            System.out.println("Using port " + NetworkUtils.SERVER_PORT);
+            // create and start the server
+            server = Network.createServer(NetworkUtils.SERVER_PORT);
+            server.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+            destroy();
+        }
+        System.out.println("Server started");
+        // add a listener that reacts on incoming network packets
+        server.addMessageListener(this, JoinMessage.class,
+                PlayerMoveMessage.class);
+        System.out.println("ServerListener activated and added to server");
+    }
+    
+    public void destroy() {
+        System.out.println("Server going down");
+        server.close();
+        System.out.println("Server down");
+    }
+    
+    /**
+     * reads messages from network.
+     * @param source
+     * @param m 
+     */
+    @Override
+    public void messageReceived(HostedConnection source, final Message m) {
+        if (m instanceof JoinMessage){
+            // TODO: send message back to client about if it can join or not.
+        } else if (m instanceof PlayerMoveMessage){
+            serverModule.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    serverModule.notifyPlayerMove(((PlayerMoveMessage) m).getPlayer(), ((PlayerMoveMessage) m).getDirection(), ((PlayerMoveMessage) m).isPressed());
+                    return true;
+                }
+            });
+
+        }
+    }
     
     @Override
     public void addPlayerMoveListener(PlayerMoveListener playerMoveListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        serverModule = (ServerModule) playerMoveListener;
     }
 
     @Override
