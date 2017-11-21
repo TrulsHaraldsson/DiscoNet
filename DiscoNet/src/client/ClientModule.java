@@ -41,12 +41,12 @@ public class ClientModule extends SimpleApplication implements
     
     @Override
     public void notifyTime(float time) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        gui.notifyTime(time);
     }
 
     @Override
     public void notifyScore(Map<String, Integer> scores) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        gui.notifyScore(scores);
     }
 
     @Override
