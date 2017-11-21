@@ -22,6 +22,8 @@ import network.messages.StartMessage;
 public class NetworkUtils {
     static final int SERVER_PORT = 7999;
     
+    static final String SERVER_HOSTNAME = "localhost";
+    
     public static void initSerializables(){
         // TODO: register for all new message types
         Serializer.registerClass(DiskStateMessage.class);
