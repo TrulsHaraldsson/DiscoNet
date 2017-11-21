@@ -29,7 +29,7 @@ public class BoardImpl extends Node implements Board {
     // total outer width (and height) of the frame
     public static final float FRAME_SIZE = FREE_AREA_WIDTH + 2f * FRAME_THICKNESS; 
     
-    private final String NAME = "board";
+    public static final String NAME = "board";
     
     private final Geometry board;
     

@@ -6,7 +6,9 @@
 package client;
 
 import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.scene.Node;
 
 /**
  *
@@ -14,24 +16,29 @@ import com.jme3.app.state.BaseAppState;
  */
 public class EndState extends BaseAppState{
 
+    SimpleApplication simpleApplication;
+    
     @Override
     protected void initialize(Application app) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        simpleApplication = (SimpleApplication)app;
     }
 
     @Override
     protected void cleanup(Application app) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("Endstate cleanup");
     }
 
     @Override
     protected void onEnable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Node root = simpleApplication.getRootNode();
+        
+        // Remove all disks and board
+        root.detachAllChildren();
     }
 
     @Override
     protected void onDisable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("EndState disabled");
     }
     
 }

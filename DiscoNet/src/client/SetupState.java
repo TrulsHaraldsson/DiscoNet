@@ -5,8 +5,15 @@
  */
 package client;
 
+import api.DiskState;
+import api.DiskStateListener;
 import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import java.util.List;
+import models.BoardImpl;
 
 /**
  *
@@ -14,24 +21,35 @@ import com.jme3.app.state.BaseAppState;
  */
 public class SetupState extends BaseAppState{
 
+    SimpleApplication simpleApplication;
+    
     @Override
     protected void initialize(Application app) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        simpleApplication = (SimpleApplication)app;
     }
 
     @Override
     protected void cleanup(Application app) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("SetupState cleanup");
     }
 
     @Override
     protected void onEnable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("SetupState enabled");
+        
+        Node root = simpleApplication.getRootNode();
+        // Create empty board
+        BoardImpl board = new BoardImpl(simpleApplication.getAssetManager());
+        root.attachChild(board);
+        
+        // Set board invisible
+        board.setCullHint(Spatial.CullHint.Always);
+            
     }
 
     @Override
     protected void onDisable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("SetupState disabled");
     }
     
 }

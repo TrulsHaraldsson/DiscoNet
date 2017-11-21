@@ -8,6 +8,7 @@ package client;
 import api.DiskState;
 import api.DiskStateListener;
 import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import java.util.List;
 
@@ -17,24 +18,26 @@ import java.util.List;
  */
 public class PlayState extends BaseAppState implements DiskStateListener{
 
+    SimpleApplication simpleApplication;
+    
     @Override
     protected void initialize(Application app) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        simpleApplication = (SimpleApplication)app;
     }
 
     @Override
     protected void cleanup(Application app) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("PlayState cleanup");
     }
 
     @Override
     protected void onEnable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("PlayState enabled");
     }
 
     @Override
     protected void onDisable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("PlayState disabled");
     }
 
     @Override
