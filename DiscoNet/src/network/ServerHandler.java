@@ -50,5 +50,21 @@ public class ServerHandler implements PlayerMoveEmitter, GameStateListener, Scor
     public PlayerMoveEmitter getPlayerMoveEmitter(){
         return this;
     }
+
+    public DiskStateListener getDiskStateListener() {
+        return this;
+    }
+
+    public GameStateListener getGameStateListener() {
+        return this;
+    }
+
+    public TimeListener getTimeListener() {
+        return this;
+    }
+
+    public ScoreListener getScoreListener() {
+        return this;
+    }
     
 }
