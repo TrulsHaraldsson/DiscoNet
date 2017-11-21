@@ -91,7 +91,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                     return true;
                 }
             });
-
         }
     }
     

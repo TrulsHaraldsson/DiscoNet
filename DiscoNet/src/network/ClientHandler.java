@@ -23,10 +23,14 @@ import com.jme3.network.Network;
 import java.io.IOException;
 import java.util.ArrayList;
 import static network.NetworkUtils.*;
-import network.messages.HelloWorldMessage;
+import network.messages.DiskStateMessage;
+import network.messages.GameStateMessage;
+import network.messages.InitAckMessage;
+import network.messages.InitMessage;
 import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
+import network.messages.StartMessage;
 
 /**
  *
@@ -43,18 +47,23 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     
     @SuppressWarnings("LeakingThisInConstructor")
     public ClientHandler(){
+        NetworkUtils.initSerializables();
         connectToServer();
         
         gameStateListeners = new ArrayList<>();
         diskStateListeners = new ArrayList<>();
         scoreListeners = new ArrayList<>();
         timeListeners = new ArrayList<>();
-/*        
+        
+        myClient.addMessageListener(this, StartMessage.class);
+        myClient.addMessageListener(this, InitMessage.class);
+        myClient.addMessageListener(this, InitAckMessage.class);
         myClient.addMessageListener(this, JoinMessage.class);
         myClient.addMessageListener(this, JoinAckMessage.class);
-        myClient.addMessageListener(this, PlayerMoveMessage.class);       
-*/
-        myClient.addMessageListener(this, HelloWorldMessage.class);
+        myClient.addMessageListener(this, PlayerMoveMessage.class);
+        myClient.addMessageListener(this, DiskStateMessage.class);
+        myClient.addMessageListener(this, GameStateMessage.class);
+
     }
 
     @SuppressWarnings("CallToPrintStackTrace")
@@ -93,15 +102,12 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         if(m instanceof JoinMessage){
             JoinMessage joinMessage = (JoinMessage) m;
             System.out.println("Client # " + source.getId() + " received : " + joinMessage.toString());            
-        } else if(m instanceof PlayerMoveMessage){
-            PlayerMoveMessage playerMoveMessage = (PlayerMoveMessage) m;
-            System.out.println("Move message received");
         } else if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
             System.out.println("Join ack message received");
-        } else if(m instanceof HelloWorldMessage){
-            HelloWorldMessage helloWorldMessage = (HelloWorldMessage) m;
-            System.out.println("Message received : " + helloWorldMessage.getString());
+        } else if(m instanceof PlayerMoveMessage){
+            PlayerMoveMessage playerMoveMessage = (PlayerMoveMessage) m;
+            System.out.println("Move message received");
         }else {
             System.out.println("This message does not exist!");
         }
