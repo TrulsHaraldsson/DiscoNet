@@ -41,11 +41,12 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     Client myClient;
     
     public ClientHandler(){
-        connectToServer();
+//        connectToServer();
         
-        myClient.addMessageListener(new ClientHandler(), JoinMessage.class);
+/*        myClient.addMessageListener(new ClientHandler(), JoinMessage.class);
         myClient.addMessageListener(new ClientHandler(), JoinAckMessage.class);
-        myClient.addMessageListener(new ClientHandler(), PlayerMoveMessage.class);        
+        myClient.addMessageListener(new ClientHandler(), PlayerMoveMessage.class);       
+*/
     }
     
     @SuppressWarnings("CallToPrintStackTrace")

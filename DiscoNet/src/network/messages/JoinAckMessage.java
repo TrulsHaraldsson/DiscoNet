@@ -6,13 +6,12 @@
 package network.messages;
 
 import api.Player;
-import com.jme3.network.AbstractMessage;
 
 /**
  *
  * @author hannes
  */
-public class JoinAckMessage extends AbstractMessage {
+public class JoinAckMessage extends AbstractTCPMessage {
     private final Player newPlayer;
     private final boolean joined;
     
@@ -21,15 +20,16 @@ public class JoinAckMessage extends AbstractMessage {
      * @param newPlayer
      */
     public JoinAckMessage(Player newPlayer){
+        super();
         this.newPlayer = newPlayer;
         this.joined = true;
-        this.setReliable(true);
     }
     
     /**
      * Join is not possible
      */
     public JoinAckMessage(){
+        super();
         this.newPlayer = null;
         this.joined = false;
     }

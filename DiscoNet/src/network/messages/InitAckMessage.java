@@ -11,17 +11,10 @@ import api.Player;
  *
  * @author hannes
  */
-public class AbstractClientMessage extends AbstractTCPMessage {
-
-    private final Player player;
+public class InitAckMessage extends AbstractClientMessage {
     
-    public AbstractClientMessage(Player player){
-        super();
-        this.player = player;
+    public InitAckMessage(Player player) {
+        super(player);
     }
-            
     
-    public Player getPlayer(){
-        return player;
-    }
 }

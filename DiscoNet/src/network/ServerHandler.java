@@ -35,7 +35,7 @@ import server.ServerModule;
  *  
  * @author truls
  */
-public class ServerHandler implements PlayerMoveEmitter, GameStateListener, ScoreListener, TimeListener, DiskStateListener {
+public class ServerHandler implements MessageListener<HostedConnection>, PlayerMoveEmitter, GameStateListener, ScoreListener, TimeListener, DiskStateListener {
     private ServerModule serverModule;
     
     private Server server;
@@ -59,7 +59,7 @@ public class ServerHandler implements PlayerMoveEmitter, GameStateListener, Scor
         }
         System.out.println("Server started");
         // add a listener that reacts on incoming network packets
-        server.addMessageListener(new ServerMessageListener(), JoinMessage.class,
+        server.addMessageListener(this, JoinMessage.class,
                 PlayerMoveMessage.class);
         System.out.println("ServerListener activated and added to server");
     }
@@ -71,25 +71,24 @@ public class ServerHandler implements PlayerMoveEmitter, GameStateListener, Scor
     }
     
     /**
-     * Reads the messages from network
+     * reads messages from network.
+     * @param source
+     * @param m 
      */
-    private class ServerMessageListener implements MessageListener<HostedConnection> {
-        @Override
-        public void messageReceived(HostedConnection source, final Message m) {
-            if (m instanceof JoinMessage){
-                // TODO: send message back to client about if it can join or not.
-            } else if (m instanceof PlayerMoveMessage){
-                serverModule.enqueue(new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        serverModule.notifyPlayerMove(((PlayerMoveMessage) m).getPlayer(), ((PlayerMoveMessage) m).getDirection(), ((PlayerMoveMessage) m).isPressed());
-                        return true;
-                    }
-                });
-                
-            }
+    @Override
+    public void messageReceived(HostedConnection source, final Message m) {
+        if (m instanceof JoinMessage){
+            // TODO: send message back to client about if it can join or not.
+        } else if (m instanceof PlayerMoveMessage){
+            serverModule.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    serverModule.notifyPlayerMove(((PlayerMoveMessage) m).getPlayer(), ((PlayerMoveMessage) m).getDirection(), ((PlayerMoveMessage) m).isPressed());
+                    return true;
+                }
+            });
+
         }
-    
     }
     
     @Override
