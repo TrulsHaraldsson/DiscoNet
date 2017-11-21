@@ -5,6 +5,7 @@
  */
 package server;
 
+import com.jme3.system.JmeContext;
 import network.ServerHandler;
 
 /**
@@ -22,9 +23,12 @@ public class BootstrapServer {
         
         // Server emitts GameStates, DiskStates, Time and Scores
         // to ServerHandler
+        /*
         sm.addDiskStateListener(sh.getDiskStateListener());
         sm.addGameStateListener(sh.getGameStateListener());
         sm.addTimeListener(sh.getTimeListener());
         sm.addScoreListener(sh.getScoreListener());
+        */
+        sm.start(JmeContext.Type.Headless);
     }
 }

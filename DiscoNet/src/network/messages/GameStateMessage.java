@@ -5,7 +5,7 @@
  */
 package network.messages;
 
-import com.jme3.network.AbstractMessage;
+import api.GameState;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -13,10 +13,18 @@ import com.jme3.network.serializing.Serializable;
  * @author hannes
  */
 @Serializable
-public class AbstractTCPMessage extends AbstractMessage {
-    
-    public AbstractTCPMessage(){
-        this.setReliable(true);
+public class GameStateMessage extends AbstractTCPMessage {
+    private final GameState state;
+
+    public GameStateMessage() {
+        this.state = null;
     }
     
+    public GameStateMessage(GameState state){
+        this.state = state;
+    }
+    
+    public GameState getGameState(){
+        return state;
+    }
 }

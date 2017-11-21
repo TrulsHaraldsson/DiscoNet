@@ -6,12 +6,18 @@
 package network.messages;
 
 import api.models.Player;
+import com.jme3.network.serializing.Serializable;
 
 /**
  *
  * @author hannes
  */
+@Serializable
 public class InitAckMessage extends AbstractClientMessage {
+
+    public InitAckMessage() {
+        super(null);
+    }
     
     public InitAckMessage(Player player) {
         super(player);
