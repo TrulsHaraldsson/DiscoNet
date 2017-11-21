@@ -19,10 +19,14 @@ public class BootstrapClient {
         ClientModule cm = new ClientModule();
         GUIModule gm = new GUIModule();
         
-        cm.addPlayerMoveListener(ch);
+        // ClienModule emmits player moves to client handler
+        cm.getPlayerMoveEmitter().addPlayerMoveListener(ch);
+        
+        // ClientHandler emitts DiskState and GameState to ClientModule
         ch.addDiskStateListener(cm);
         ch.addGameStateListener(cm);
         
+        // ClientHandler emitts Time, Score and GameStates to GUIModule
         ch.addTimeListener(gm.getTimeListener());
         ch.addScoreListener(gm.getScoreListener());
         ch.addGameStateListener(gm.getGameStateListener());
