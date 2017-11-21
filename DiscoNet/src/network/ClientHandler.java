@@ -19,7 +19,10 @@ import api.TimeListener;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
+import com.jme3.network.Network;
+import java.io.IOException;
 import java.util.ArrayList;
+import static network.NetworkUtils.*;
 import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
@@ -34,6 +37,26 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     private final ArrayList<DiskStateListener> diskStateListeners = new ArrayList<>();
     private final ArrayList<ScoreListener> scoreListeners = new ArrayList<>();
     private final ArrayList<TimeListener> timeListeners = new ArrayList<>();
+    
+    Client myClient;
+    
+    public ClientHandler(){
+        connectToServer();
+        
+        myClient.addMessageListener(new ClientHandler(), JoinMessage.class);
+        myClient.addMessageListener(new ClientHandler(), JoinAckMessage.class);
+        myClient.addMessageListener(new ClientHandler(), PlayerMoveMessage.class);        
+    }
+    
+    @SuppressWarnings("CallToPrintStackTrace")
+    private void connectToServer(){
+           try{
+            myClient = Network.connectToServer(SERVER_HOSTNAME, SERVER_PORT);
+            myClient.start();
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }      
+    }
     
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
@@ -59,11 +82,12 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     public void messageReceived(Client source, Message m) {
         if(m instanceof JoinMessage){
             JoinMessage joinMessage = (JoinMessage) m;
-            System.out.println("Join message received");
+            System.out.println("Client # " + source.getId() + " received : " + joinMessage.toString());
+            
         }
         if(m instanceof PlayerMoveMessage){
             PlayerMoveMessage playerMoveMessage = (PlayerMoveMessage) m;
-            System.out.println("Move message receied");
+            System.out.println("Move message received");
         }
         if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;

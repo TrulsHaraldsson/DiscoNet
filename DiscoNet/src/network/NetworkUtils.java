@@ -11,4 +11,5 @@ package network;
  */
 public class NetworkUtils {
     static final int SERVER_PORT = 7999;
+    static final String SERVER_HOSTNAME = "localhost";
 }
