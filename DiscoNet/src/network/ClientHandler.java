@@ -41,7 +41,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     Client myClient;
     
     public ClientHandler(){
-//        connectToServer();
+        connectToServer();
         
 /*        myClient.addMessageListener(new ClientHandler(), JoinMessage.class);
         myClient.addMessageListener(new ClientHandler(), JoinAckMessage.class);
@@ -52,6 +52,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     @SuppressWarnings("CallToPrintStackTrace")
     private void connectToServer(){
            try{
+            System.out.println("Trying to connect to server");
             myClient = Network.connectToServer(SERVER_HOSTNAME, SERVER_PORT);
             myClient.start();
         }catch(IOException ex){
