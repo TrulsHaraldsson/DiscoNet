@@ -5,14 +5,17 @@
  */
 package client;
 
+import api.DiskState;
+import api.DiskStateListener;
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
+import java.util.List;
 
 /**
  *
  * @author truls
  */
-public class PlayState extends BaseAppState {
+public class PlayState extends BaseAppState implements DiskStateListener{
 
     @Override
     protected void initialize(Application app) {
@@ -31,6 +34,11 @@ public class PlayState extends BaseAppState {
 
     @Override
     protected void onDisable() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void notifyDiskState(List<DiskState> diskStates) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
