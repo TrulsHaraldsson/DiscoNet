@@ -11,7 +11,6 @@ import api.GameStateEmitter;
 import api.GameStateListener;
 import api.MoveDirection;
 import api.Player;
-import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreEmitter;
 import api.ScoreListener;
@@ -21,6 +20,9 @@ import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import java.util.ArrayList;
+import network.messages.JoinAckMessage;
+import network.messages.JoinMessage;
+import network.messages.PlayerMoveMessage;
 
 /**
  *
@@ -55,7 +57,18 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
 
     @Override
     public void messageReceived(Client source, Message m) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(m instanceof JoinMessage){
+            JoinMessage joinMessage = (JoinMessage) m;
+            System.out.println("Join message received");
+        }
+        if(m instanceof PlayerMoveMessage){
+            PlayerMoveMessage playerMoveMessage = (PlayerMoveMessage) m;
+            System.out.println("Move message receied");
+        }
+        if(m instanceof JoinAckMessage){
+            JoinAckMessage joinAckMessage = (JoinAckMessage) m;
+            System.out.println("Join ack message received");
+        }
     }
 
     @Override
