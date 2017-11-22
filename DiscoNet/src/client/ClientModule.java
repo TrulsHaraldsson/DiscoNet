@@ -9,6 +9,7 @@ import api.DiskState;
 import api.DiskStateListener;
 import api.GameState;
 import api.GameStateListener;
+import api.IDProvider;
 import api.IDRequester;
 import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
@@ -40,6 +41,12 @@ public class ClientModule extends SimpleApplication implements
     private ActionListener actionListener;
     
     protected int myID;
+    
+    private IDProvider idProvider;
+    
+    public ClientModule(IDProvider idProvider){
+        this.idProvider = idProvider;
+    }
     
     private void initActionListener(){
         this.actionListener = new ActionListener() {
@@ -119,11 +126,14 @@ public class ClientModule extends SimpleApplication implements
         flyCam.setEnabled(false);
         
         setDisplayStatView(false);
+        
+        idProvider.requestID(this);
     }
 
     @Override
     public void setID(int id) {
         this.myID = id;
+        System.out.println("Finally new ID!" + id);
     }
 
 }

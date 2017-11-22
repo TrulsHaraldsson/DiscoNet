@@ -13,26 +13,20 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class JoinAckMessage extends AbstractTCPMessage {
-    private final int id;
-    private final boolean joined;
+    private int id;
+    private boolean joined;
+    
+    public JoinAckMessage(){}
     
     /**
      * Join is possible.
      * @param id
      */
-    public JoinAckMessage(int id){
+    public JoinAckMessage(int id, boolean joined){
         this.id = id;
-        this.joined = true;
+        this.joined = joined;
     }
-    
-    /**
-     * Join is not possible
-     */
-    public JoinAckMessage(){
-        this.id = -1;
-        this.joined = false;
-    }
-    
+  
     public int getID(){
         return id;
     }

@@ -15,6 +15,7 @@ import api.PlayerMoveListener;
 import api.ScoreListener;
 import api.TimeListener;
 import com.jme3.app.SimpleApplication;
+import com.jme3.network.Filters;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
@@ -26,6 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
 import server.ServerModule;
@@ -80,8 +86,25 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
      */
     @Override
     public void messageReceived(HostedConnection source, final Message m) {
-        if (m instanceof JoinMessage){
+        if (m instanceof JoinMessage){                
             // TODO: send message back to client about if it can join or not.
+            Future<Integer> result = serverModule.enqueue(new Callable(){
+                @Override
+                public Object call() throws Exception{
+                    return serverModule.initId();
+                }
+            });
+            JoinAckMessage joinAckMessage;
+            try{
+                joinAckMessage = new JoinAckMessage(result.get(), true);
+                
+            } catch (InterruptedException ex) {
+                joinAckMessage = new JoinAckMessage(-1, false);
+            } catch (ExecutionException e){
+                joinAckMessage = new JoinAckMessage(-1, false);
+            }
+            server.broadcast(Filters.equalTo(source), joinAckMessage);              
+
         } else if (m instanceof PlayerMoveMessage){
             // send to simple application
             serverModule.enqueue(new Callable() {

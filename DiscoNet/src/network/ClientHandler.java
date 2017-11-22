@@ -76,6 +76,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             System.out.println("Trying to connect to server");
             myClient = Network.connectToServer(SERVER_HOSTNAME, SERVER_PORT);
             myClient.start();
+            
         }catch(IOException ex){
             ex.printStackTrace();
         }
@@ -106,8 +107,8 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
             if (joinAckMessage.getJoined()){
-                idRequester.setID(joinAckMessage.getID());
-            }
+                idRequester.setID(joinAckMessage.getID());                
+            }            
             idRequester = null;
         } else if (m instanceof GameStateMessage){
             for(GameStateListener l : gameStateListeners){
@@ -142,6 +143,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     @Override
     public void requestID(IDRequester idr) {
         this.idRequester = idr;
+        myClient.send(new JoinMessage());
     }
     
 }

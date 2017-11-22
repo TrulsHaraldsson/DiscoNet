@@ -9,6 +9,8 @@ import api.DiskStateEmitter;
 import api.DiskStateListener;
 import api.GameStateEmitter;
 import api.GameStateListener;
+import api.IDProvider;
+import api.IDRequester;
 import api.MoveDirection;
 import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
@@ -22,7 +24,11 @@ import com.jme3.app.SimpleApplication;
  *
  * @author truls
  */
-public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener{
+public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, IDProvider{
+        
+    public int initId(){
+        return 1337;
+    }
     
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
@@ -57,5 +63,11 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void requestID(IDRequester idr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 }
