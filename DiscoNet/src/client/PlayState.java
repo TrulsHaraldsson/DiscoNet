@@ -32,9 +32,6 @@ public class PlayState extends BaseAppState implements DiskStateListener{
             Material m = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
             PlayerDisk p = new PlayerDisk(m, d.getID());
             addPlayer(p);
-            if (p.getID() == app.myID){
-                app.setMe(p);
-            }
         }
     }
     

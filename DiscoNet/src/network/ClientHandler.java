@@ -9,6 +9,8 @@ import api.DiskStateEmitter;
 import api.DiskStateListener;
 import api.GameStateEmitter;
 import api.GameStateListener;
+import api.IDProvider;
+import api.IDRequester;
 import api.MoveDirection;
 import api.PlayerMoveListener;
 import api.ScoreEmitter;
@@ -35,13 +37,15 @@ import network.messages.StartMessage;
  *
  * @author truls
  */
-public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, MessageListener<Client>{
+public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, 
+        TimeEmitter, PlayerMoveListener, IDProvider, MessageListener<Client>{
     
     private final ArrayList<GameStateListener> gameStateListeners;
     private final ArrayList<DiskStateListener> diskStateListeners;
     private final ArrayList<ScoreListener> scoreListeners;
     private final ArrayList<TimeListener> timeListeners;
     
+    private IDRequester idRequester;
     Client myClient;
     
     @SuppressWarnings("LeakingThisInConstructor")
@@ -103,6 +107,10 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             System.out.println("Client # " + source.getId() + " received : " + joinMessage.toString());            
         } else if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
+            if (joinAckMessage.getJoined()){
+                idRequester.setID(joinAckMessage.getID());
+            }
+            idRequester = null;
             System.out.println("Join ack message received");
         } else if(m instanceof PlayerMoveMessage){
             PlayerMoveMessage playerMoveMessage = (PlayerMoveMessage) m;
@@ -123,6 +131,11 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     @Override
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void requestID(IDRequester idr) {
+        this.idRequester = idr;
     }
     
 }

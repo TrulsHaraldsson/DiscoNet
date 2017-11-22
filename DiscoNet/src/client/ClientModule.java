@@ -9,6 +9,7 @@ import api.DiskState;
 import api.DiskStateListener;
 import api.GameState;
 import api.GameStateListener;
+import api.IDRequester;
 import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreListener;
@@ -21,14 +22,13 @@ import gui.GUINode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import models.PlayerDisk;
 
 /**
  *
  * @author truls
  */
 public class ClientModule extends SimpleApplication implements 
-        GameStateListener, DiskStateListener, TimeListener, ScoreListener, PlayerMoveEmitter {
+        GameStateListener, DiskStateListener, TimeListener, ScoreListener, PlayerMoveEmitter, IDRequester {
 
     ArrayList<PlayerMoveListener> playerMoveListeners = new ArrayList<>();
     private final GUINode gui = new GUINode();
@@ -40,11 +40,6 @@ public class ClientModule extends SimpleApplication implements
     private ActionListener actionListener;
     
     protected int myID;
-    private PlayerDisk me;
-    
-    public void setMe(PlayerDisk me){
-        this.me = me;
-    }
     
     private void initActionListener(){
         this.actionListener = new ActionListener() {
@@ -52,13 +47,9 @@ public class ClientModule extends SimpleApplication implements
             public void onAction(String name, boolean keyPressed, float tpf) {
                 // TODO: Change to only send to server
                 if (name.equals("Up")){
-                    me.accelerateY(keyPressed);
                 } else if (name.equals("Down")){
-                    me.accelerateY(!keyPressed);
                 } else if (name.equals("Left")){
-                    me.accelerateX(!keyPressed);
                 } else if (name.equals("Right")){
-                    me.accelerateX(keyPressed);
                 }
             }
         };
@@ -82,10 +73,6 @@ public class ClientModule extends SimpleApplication implements
                 setupState.setEnabled(true);
                 break;
         }
-    }
-    
-    public void onJoin(int diskID){
-        this.myID = diskID;
     }
 
     @Override
@@ -132,6 +119,11 @@ public class ClientModule extends SimpleApplication implements
         flyCam.setEnabled(false);
         
         setDisplayStatView(false);
+    }
+
+    @Override
+    public void setID(int id) {
+        this.myID = id;
     }
 
 }
