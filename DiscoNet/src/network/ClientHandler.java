@@ -9,6 +9,8 @@ import api.DiskStateEmitter;
 import api.DiskStateListener;
 import api.GameStateEmitter;
 import api.GameStateListener;
+import api.IDProvider;
+import api.IDRequester;
 import api.MoveDirection;
 import api.PlayerMoveListener;
 import api.ScoreEmitter;
@@ -36,13 +38,15 @@ import network.messages.StartMessage;
  *
  * @author truls
  */
-public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, MessageListener<Client>{
+public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, 
+        TimeEmitter, PlayerMoveListener, IDProvider, MessageListener<Client>{
     
     private final ArrayList<GameStateListener> gameStateListeners;
     private final ArrayList<DiskStateListener> diskStateListeners;
     private final ArrayList<ScoreListener> scoreListeners;
     private final ArrayList<TimeListener> timeListeners;
     
+    private IDRequester idRequester;
     Client myClient;
     
     @SuppressWarnings("LeakingThisInConstructor")
@@ -101,20 +105,14 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     public void messageReceived(Client source, Message m) {
         if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
-            if(!joinAckMessage.getJoined()){
-                try{
-                    myClient.send(new JoinMessage());
-                } catch (Exception e){
-                    System.out.println("Error : " + e.getMessage());
-                } finally {
-                    System.out.println("Something wrong, player did not get included.\nTrying to reconnect.");
-                }
+            if (joinAckMessage.getJoined()){
+                idRequester.setID(joinAckMessage.getID());
             }
+            idRequester = null;
         } else if (m instanceof GameStateMessage){
             for(GameStateListener l : gameStateListeners){
                 l.notifyGameState(((GameStateMessage) m).getGameState());                
-            }            
-            
+            }                        
         } else if(m instanceof InitMessage){
             //Respond to server with own id
             for(DiskStateListener l : diskStateListeners){
@@ -139,6 +137,11 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     @Override
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void requestID(IDRequester idr) {
+        this.idRequester = idr;
     }
     
 }
