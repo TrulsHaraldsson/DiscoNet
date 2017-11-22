@@ -108,7 +108,11 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         } else if(m instanceof PlayerMoveMessage){
             PlayerMoveMessage playerMoveMessage = (PlayerMoveMessage) m;
             System.out.println("Move message received");
-        }else {
+        } else if(m instanceof InitMessage){
+            InitMessage initMessage = (InitMessage) m;
+            System.out.println("Init message received");
+            
+        } else {
             System.out.println("This message does not exist!");
         }
     }

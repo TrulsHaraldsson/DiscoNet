@@ -8,6 +8,7 @@ package client;
 import api.DiskState;
 import api.DiskStateListener;
 import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -26,17 +27,19 @@ public class PlayState extends BaseAppState implements DiskStateListener{
 
     @Override
     protected void cleanup(Application app) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("PlayState cleanup");
     }
 
     @Override
     protected void onEnable() {
         bindKeys();
+        System.out.println("PlayState enabled");
     }
 
     @Override
     protected void onDisable() {
         unbindKeys();
+        System.out.println("PlayState disabled");
     }
     
     private void bindKeys(){
