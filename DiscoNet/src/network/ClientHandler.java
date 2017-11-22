@@ -15,6 +15,7 @@ import api.ScoreEmitter;
 import api.ScoreListener;
 import api.TimeEmitter;
 import api.TimeListener;
+import com.jme3.cinematic.PlayState;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
@@ -95,21 +96,36 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     public void addTimeListener(TimeListener timeListener) {
         timeListeners.add(timeListener);
     }
-
+    
     @Override
     public void messageReceived(Client source, Message m) {
-        if(m instanceof JoinMessage){
-            JoinMessage joinMessage = (JoinMessage) m;
-            System.out.println("Client # " + source.getId() + " received : " + joinMessage.toString());            
-        } else if(m instanceof JoinAckMessage){
+        if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
-            System.out.println("Join ack message received");
-        } else if(m instanceof PlayerMoveMessage){
-            PlayerMoveMessage playerMoveMessage = (PlayerMoveMessage) m;
-            System.out.println("Move message received");
+            if(!joinAckMessage.getJoined()){
+                try{
+                    myClient.send(new JoinMessage());
+                } catch (Exception e){
+                    System.out.println("Error : " + e.getMessage());
+                } finally {
+                    System.out.println("Something wrong, player did not get included.\nTrying to reconnect.");
+                }
+            }
+        } else if (m instanceof GameStateMessage){
+            for(GameStateListener l : gameStateListeners){
+                l.notifyGameState(((GameStateMessage) m).getGameState());                
+            }            
+            
         } else if(m instanceof InitMessage){
-            InitMessage initMessage = (InitMessage) m;
-            System.out.println("Init message received");
+            //Respond to server with own id
+            for(DiskStateListener l : diskStateListeners){
+                l.notifyDiskState(((DiskStateMessage) m).getDiskStates());
+            }
+            myClient.send(new InitAckMessage(myClient.getId()));
+            
+        } else if (m instanceof DiskStateMessage){
+            for(DiskStateListener l : diskStateListeners){
+                l.notifyDiskState(((DiskStateMessage) m).getDiskStates());
+            }
             
         } else {
             System.out.println("This message does not exist!");
