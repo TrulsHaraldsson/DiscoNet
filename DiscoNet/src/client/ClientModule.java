@@ -14,10 +14,13 @@ import api.PlayerMoveListener;
 import api.ScoreListener;
 import api.TimeListener;
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.controls.ActionListener;
 import gui.GUINode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import models.DiskImpl;
+import models.PlayerDisk;
 
 /**
  *
@@ -32,6 +35,35 @@ public class ClientModule extends SimpleApplication implements
     private final PlayState playState = new PlayState();
     private final EndState endState = new EndState();
     private final SetupState setupState = new SetupState();
+    
+    private ActionListener actionListener;
+    
+    private PlayerDisk me;
+    
+    public void setMe(PlayerDisk me){
+        this.me = me;
+    }
+    
+    private void initActionListener(){
+        this.actionListener = new ActionListener() {
+            @Override
+            public void onAction(String name, boolean keyPressed, float tpf) {
+                if (name.equals("Up")){
+                    me.accelerateY(keyPressed);
+                } else if (name.equals("Down")){
+                    me.accelerateY(!keyPressed);
+                } else if (name.equals("Left")){
+                    me.accelerateX(!keyPressed);
+                } else if (name.equals("Right")){
+                    me.accelerateX(keyPressed);
+                }
+            }
+        };
+    }
+    
+    public ActionListener getActionListener(){
+        return this.actionListener;
+    }
     
     @Override
     public void notifyGameState(GameState state) {
@@ -71,6 +103,7 @@ public class ClientModule extends SimpleApplication implements
 
     @Override
     public void simpleInitApp() {
+        initActionListener();
         gui.initGUI(assetManager, settings);
         guiNode.attachChild(gui);
         
@@ -83,6 +116,7 @@ public class ClientModule extends SimpleApplication implements
         flyCam.setEnabled(false);
         
         setDisplayStatView(false);
+        
     }
 
 }

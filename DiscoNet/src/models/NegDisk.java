@@ -6,6 +6,7 @@
 package models;
 
 import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
 
 /**
  *
@@ -22,6 +23,11 @@ public class NegDisk extends DiskImpl{
     @Override
     public int reward() {
         return REWARD;
+    }
+    
+    @Override
+    public Vector3f getAcceleration(){
+        return Vector3f.ZERO;
     }
     
 }

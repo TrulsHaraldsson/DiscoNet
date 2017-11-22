@@ -26,4 +26,6 @@ public interface RigidBody {
     void translate(Vector3f offset);
     
     Vector3f getCenterOfMass();
+    
+    Vector3f getAcceleration();
 }

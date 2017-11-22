@@ -6,6 +6,7 @@
 package models;
 
 import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Cylinder;
 
@@ -56,6 +57,11 @@ public class PosDisk extends DiskImpl{
             super.detachChildNamed("dot" + pointsLeft);
             return pointsLeft--;
         }
+    }
+    
+    @Override
+    public Vector3f getAcceleration(){
+        return Vector3f.ZERO;
     }
     
 }

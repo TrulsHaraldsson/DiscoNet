@@ -6,8 +6,8 @@
 package api;
 
 import api.models.Player;
-import api.models.Disk;
 import com.jme3.math.Vector3f;
+import models.DiskImpl;
 
 /**
  *
@@ -19,9 +19,9 @@ public class DiskState {
     private final Vector3f acceleration;
     private final Player player;
 
-    public DiskState(Disk d, Player p) {
-        this.pos = null;
-        this.velocity = null;
+    public DiskState(DiskImpl d, Player p) {
+        this.pos = d.getCenterOfMass();
+        this.velocity = d.getVelocity();
         this.acceleration = null;
         this.player = p;
     }
