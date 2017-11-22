@@ -9,6 +9,8 @@ import api.DiskState;
 import api.DiskStateListener;
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.KeyTrigger;
 import java.util.List;
 
 /**
@@ -16,10 +18,10 @@ import java.util.List;
  * @author truls
  */
 public class PlayState extends BaseAppState implements DiskStateListener{
-
+    private ClientModule app;
     @Override
     protected void initialize(Application app) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.app = (ClientModule) app;
     }
 
     @Override
@@ -29,12 +31,31 @@ public class PlayState extends BaseAppState implements DiskStateListener{
 
     @Override
     protected void onEnable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        bindKeys();
     }
 
     @Override
     protected void onDisable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        unbindKeys();
+    }
+    
+    private void bindKeys(){
+        // Add key mappings
+        app.getInputManager().addMapping("Up",  new KeyTrigger(KeyInput.KEY_U));
+        app.getInputManager().addMapping("Right",   new KeyTrigger(KeyInput.KEY_K));
+        app.getInputManager().addMapping("Left",  new KeyTrigger(KeyInput.KEY_H));
+        app.getInputManager().addMapping("Down", new KeyTrigger(KeyInput.KEY_J));
+        // Add them as listeners
+        app.getInputManager().addListener(app.getActionListener(),"Up", "Right", "Left", "Down");
+        
+    }
+    
+    private void unbindKeys(){
+        // remove key mappings
+        app.getInputManager().deleteMapping("Up");
+        app.getInputManager().deleteMapping("Right");
+        app.getInputManager().deleteMapping("Left");
+        app.getInputManager().deleteMapping("Down");
     }
 
     @Override
