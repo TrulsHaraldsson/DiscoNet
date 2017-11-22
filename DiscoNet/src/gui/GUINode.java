@@ -12,6 +12,7 @@ import api.TimeListener;
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     private BitmapText txtPoint;
     private BitmapText txtTime;
     private BitmapText txtInfo;
+    private BitmapText txtSetupText;
     
     public void initGUI(AssetManager assetManager, AppSettings appSettings){
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -44,8 +46,15 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
         txtInfo.setText("PRESS P\nTO PLAY\nAGAIN OR\nE TO EXIT:");
         txtInfo.setLocalTranslation(appSettings.getWidth()*0.01f, appSettings.getHeight()*0.40f, 0);
         
-        super.attachChild(txtPoint);
-        super.attachChild(txtTime);
+        txtSetupText = new BitmapText(guiFont, false);
+        txtSetupText.setSize(guiFont.getCharSet().getRenderedSize() * 4);
+        txtSetupText.setText("WAITING FOR GAME TO START");
+        txtSetupText.setColor(ColorRGBA.White);
+        txtSetupText.setLocalTranslation(appSettings.getWidth()*0.5f - txtSetupText.getLineWidth() / 2, 
+                appSettings.getHeight()*0.50f + txtSetupText.getLineHeight() / 2, 0);
+        
+        //super.attachChild(txtPoint);
+        //super.attachChild(txtTime);
     }
     
     @Override
@@ -78,6 +87,10 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
             case END:
                 super.attachChild(txtInfo);
             case SETUP:
+                super.attachChild(txtSetupText);
+                super.detachChild(txtTime);
+                super.detachChild(txtInfo);
+                super.detachChild(txtPoint);
                 break;
         } 
     }

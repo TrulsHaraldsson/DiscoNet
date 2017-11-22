@@ -15,11 +15,12 @@ import api.ScoreListener;
 import api.TimeListener;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import gui.GUINode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import models.DiskImpl;
 import models.PlayerDisk;
 
 /**
@@ -109,14 +110,22 @@ public class ClientModule extends SimpleApplication implements
         
         flyCam.setMoveSpeed(200f);
         
+        playState.setEnabled(false);
+        endState.setEnabled(false);
+        setupState.setEnabled(false);
+        
         stateManager.attach(playState);
         stateManager.attach(endState);
         stateManager.attach(setupState);
         
+        notifyGameState(GameState.SETUP);
+        
+        getCamera().setLocation(new Vector3f(-84f, 0.0f, 720f));
+        getCamera().setRotation(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f));
+        
         flyCam.setEnabled(false);
         
         setDisplayStatView(false);
-        
     }
 
 }
