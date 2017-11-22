@@ -17,6 +17,7 @@ import api.ScoreEmitter;
 import api.ScoreListener;
 import api.TimeEmitter;
 import api.TimeListener;
+import client.ClientModule;
 import com.jme3.cinematic.PlayState;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
@@ -24,6 +25,7 @@ import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import static network.NetworkUtils.*;
 import network.messages.DiskStateMessage;
 import network.messages.GameStateMessage;
@@ -41,10 +43,10 @@ import network.messages.StartMessage;
 public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, 
         TimeEmitter, PlayerMoveListener, IDProvider, MessageListener<Client>{
     
-    private final ArrayList<GameStateListener> gameStateListeners;
-    private final ArrayList<DiskStateListener> diskStateListeners;
-    private final ArrayList<ScoreListener> scoreListeners;
-    private final ArrayList<TimeListener> timeListeners;
+    private ClientModule gameStateListener;
+    private ClientModule diskStateListener;
+    private ClientModule scoreListener;
+    private ClientModule timeListener;
     
     private IDRequester idRequester;
     Client myClient;
@@ -54,10 +56,6 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         NetworkUtils.initSerializables();
         connectToServer();
         
-        gameStateListeners = new ArrayList<>();
-        diskStateListeners = new ArrayList<>();
-        scoreListeners = new ArrayList<>();
-        timeListeners = new ArrayList<>();
         
         myClient.addMessageListener(this, StartMessage.class);
         myClient.addMessageListener(this, InitMessage.class);
@@ -84,26 +82,26 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
-        gameStateListeners.add(gameStateListener);
+        this.gameStateListener = (ClientModule) gameStateListener;
     }
 
     @Override
     public void addDiskStateListener(DiskStateListener diskStateListener) {
-        diskStateListeners.add(diskStateListener);
+        this.diskStateListener = (ClientModule) diskStateListener;
     }
 
     @Override
     public void addScoreListener(ScoreListener scoreListener) {
-        scoreListeners.add(scoreListener);
+        this.scoreListener = (ClientModule) scoreListener;
     }
 
     @Override
     public void addTimeListener(TimeListener timeListener) {
-        timeListeners.add(timeListener);
+        this.timeListener = (ClientModule) timeListener;
     }
     
     @Override
-    public void messageReceived(Client source, Message m) {
+    public void messageReceived(Client source, final Message m) {
         if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
             if (joinAckMessage.getJoined()){
@@ -111,20 +109,33 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             }            
             idRequester = null;
         } else if (m instanceof GameStateMessage){
-            for(GameStateListener l : gameStateListeners){
-                l.notifyGameState(((GameStateMessage) m).getGameState());                
-            }                        
+            gameStateListener.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    gameStateListener.notifyGameState(((GameStateMessage) m).getGameState());
+                    return true;
+                }
+            });                     
         } else if(m instanceof InitMessage){
             //Respond to server with own id
-            for(DiskStateListener l : diskStateListeners){
-                l.notifyDiskState(((DiskStateMessage) m).getDiskStates());
-            }
-            myClient.send(new InitAckMessage(myClient.getId()));
+            diskStateListener.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    diskStateListener.notifyDiskState(((DiskStateMessage)m).getDiskStates());
+                    return true;
+                }
+            });
+            // TODO: Do this here!? or when we are sure we are ready?
+            //myClient.send(new InitAckMessage(myClient.getId()));
             
         } else if (m instanceof DiskStateMessage){
-            for(DiskStateListener l : diskStateListeners){
-                l.notifyDiskState(((DiskStateMessage) m).getDiskStates());
-            }
+            diskStateListener.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    diskStateListener.notifyDiskState(((DiskStateMessage)m).getDiskStates());
+                    return true;
+                }
+            });
             
         } else {
             System.out.println("This message does not exist!");

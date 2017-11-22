@@ -19,7 +19,7 @@ import models.BoardImpl;
  *
  * @author truls
  */
-public class SetupState extends BaseAppState{
+public class SetupState extends BaseAppState implements DiskStateListener{
 
     SimpleApplication simpleApplication;
     
@@ -50,6 +50,11 @@ public class SetupState extends BaseAppState{
     @Override
     protected void onDisable() {
         System.out.println("SetupState disabled");
+    }
+
+    @Override
+    public void notifyDiskState(List<DiskState> diskStates) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
