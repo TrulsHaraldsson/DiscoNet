@@ -22,4 +22,6 @@ public interface Disk {
      * @return reward
      */
     int reward();
+    
+    int getID();
 }

@@ -5,7 +5,6 @@
  */
 package api;
 
-import api.models.Player;
 
 /**
  *
@@ -13,5 +12,5 @@ import api.models.Player;
  */
 public interface PlayerMoveListener {
     
-    void notifyPlayerMove(Player player, MoveDirection direction, boolean isPressed);
+    void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed);
 }

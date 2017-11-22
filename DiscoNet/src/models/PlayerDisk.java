@@ -16,8 +16,8 @@ public class PlayerDisk extends DiskImpl{
     static final float ACCELERATION_MULTIPLIER = 5f;
     private Vector3f acceleration;
     
-    public PlayerDisk(Material material) {
-        super(DiskImpl.PLAYER_R, material);
+    public PlayerDisk(Material material, int id) {
+        super(DiskImpl.PLAYER_R, material, id);
     }
 
     @Override

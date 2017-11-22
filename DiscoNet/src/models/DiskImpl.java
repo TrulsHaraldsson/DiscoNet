@@ -34,13 +34,15 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
     private final float mass;
     private final float radius;
     private final Geometry disk;
+    private final int id;
     
     private Vector3f velocity = new Vector3f(0.0f, 0.0f, 0.0f);
     
-    public DiskImpl(float radius, Material material){
+    public DiskImpl(float radius, Material material, int id){
         super.setName("disk#" + numberOfDisks++);
         this.radius = radius;
         this.mass = radius * radius * FastMath.PI * DENSITY;
+        this.id = id;
         Cylinder cyl = new Cylinder(32, 32, radius, DISK_HEIGHT, true);
         disk = new Geometry(super.getName() + "geometry", cyl);
         disk.setMaterial(material);
@@ -100,4 +102,8 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
         return this.getWorldTranslation();
     }
     
+    @Override
+    public int getID() {
+        return this.id;
+    }
 }

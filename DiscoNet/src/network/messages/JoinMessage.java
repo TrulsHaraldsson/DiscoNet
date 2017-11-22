@@ -14,6 +14,6 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class JoinMessage extends AbstractClientMessage {
     public JoinMessage(){
-        super(null);
+        super(-1);
     }
 }

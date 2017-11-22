@@ -5,7 +5,6 @@
  */
 package network.messages;
 
-import api.models.Player;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -16,11 +15,11 @@ import com.jme3.network.serializing.Serializable;
 public class InitAckMessage extends AbstractClientMessage {
 
     public InitAckMessage() {
-        super(null);
+        super(-1);
     }
     
-    public InitAckMessage(Player player) {
-        super(player);
+    public InitAckMessage(int id) {
+        super(id);
     }
     
 }

@@ -6,7 +6,6 @@
 package network.messages;
 
 import api.MoveDirection;
-import api.models.Player;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -19,13 +18,13 @@ public class PlayerMoveMessage extends AbstractClientMessage {
     private final boolean isPressed;
 
     public PlayerMoveMessage() {
-        super(null);
+        super(-1);
         this.mDirection = null;
         this.isPressed = false;
     }
     
-    public PlayerMoveMessage(Player player, MoveDirection mDirection, boolean isPressed) {
-        super(player);
+    public PlayerMoveMessage(int id, MoveDirection mDirection, boolean isPressed) {
+        super(id);
         this.mDirection = mDirection;
         this.isPressed = isPressed;
     }

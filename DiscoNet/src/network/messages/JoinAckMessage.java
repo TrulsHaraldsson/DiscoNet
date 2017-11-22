@@ -5,7 +5,6 @@
  */
 package network.messages;
 
-import api.models.Player;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -14,15 +13,15 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class JoinAckMessage extends AbstractTCPMessage {
-    private final Player newPlayer;
+    private final int id;
     private final boolean joined;
     
     /**
      * Join is possible.
-     * @param newPlayer
+     * @param id
      */
-    public JoinAckMessage(Player newPlayer){
-        this.newPlayer = newPlayer;
+    public JoinAckMessage(int id){
+        this.id = id;
         this.joined = true;
     }
     
@@ -30,12 +29,12 @@ public class JoinAckMessage extends AbstractTCPMessage {
      * Join is not possible
      */
     public JoinAckMessage(){
-        this.newPlayer = null;
+        this.id = -1;
         this.joined = false;
     }
     
-    public Player getNewPlayer(){
-        return newPlayer;
+    public int getID(){
+        return id;
     }
     
     public boolean getJoined(){

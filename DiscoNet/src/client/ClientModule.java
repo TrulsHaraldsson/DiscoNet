@@ -39,6 +39,7 @@ public class ClientModule extends SimpleApplication implements
     
     private ActionListener actionListener;
     
+    protected int myID;
     private PlayerDisk me;
     
     public void setMe(PlayerDisk me){
@@ -49,6 +50,7 @@ public class ClientModule extends SimpleApplication implements
         this.actionListener = new ActionListener() {
             @Override
             public void onAction(String name, boolean keyPressed, float tpf) {
+                // TODO: Change to only send to server
                 if (name.equals("Up")){
                     me.accelerateY(keyPressed);
                 } else if (name.equals("Down")){
@@ -80,6 +82,10 @@ public class ClientModule extends SimpleApplication implements
                 setupState.setEnabled(true);
                 break;
         }
+    }
+    
+    public void onJoin(int diskID){
+        this.myID = diskID;
     }
 
     @Override

@@ -5,7 +5,6 @@
  */
 package network.messages;
 
-import api.models.Player;
 
 /**
  *
@@ -13,15 +12,15 @@ import api.models.Player;
  */
 public class AbstractClientMessage extends AbstractTCPMessage {
 
-    private final Player player;
+    private final int id;
     
-    public AbstractClientMessage(Player player){
+    public AbstractClientMessage(int id){
         super();
-        this.player = player;
+        this.id = id;
     }
             
     
-    public Player getPlayer(){
-        return player;
+    public int getID(){
+        return id;
     }
 }

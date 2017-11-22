@@ -8,11 +8,12 @@ package client;
 import api.DiskState;
 import api.DiskStateListener;
 import com.jme3.app.Application;
-import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.material.Material;
 import java.util.List;
+import models.PlayerDisk;
 
 /**
  *
@@ -20,9 +21,25 @@ import java.util.List;
  */
 public class PlayState extends BaseAppState implements DiskStateListener{
     private ClientModule app;
+    private List<PlayerDisk> players;
     @Override
     protected void initialize(Application app) {
         this.app = (ClientModule) app;
+    }
+    
+    public void addPlayers(List<DiskState> players){
+        for (DiskState d : players){
+            Material m = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+            PlayerDisk p = new PlayerDisk(m, d.getID());
+            addPlayer(p);
+            if (p.getID() == app.myID){
+                app.setMe(p);
+            }
+        }
+    }
+    
+    public void addPlayer(PlayerDisk pd){
+        this.players.add(pd);
     }
 
     @Override

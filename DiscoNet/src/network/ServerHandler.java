@@ -87,7 +87,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
             serverModule.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {
-                    serverModule.notifyPlayerMove(((PlayerMoveMessage) m).getPlayer(), ((PlayerMoveMessage) m).getDirection(), ((PlayerMoveMessage) m).isPressed());
+                    serverModule.notifyPlayerMove(((PlayerMoveMessage) m).getID(), ((PlayerMoveMessage) m).getDirection(), ((PlayerMoveMessage) m).isPressed());
                     return true;
                 }
             });

@@ -16,8 +16,8 @@ public class NegDisk extends DiskImpl{
     
     private static final int REWARD = -3;
     
-    public NegDisk(Material material) {
-        super(DiskImpl.NEGDISK_R, material);
+    public NegDisk(Material material, int id) {
+        super(DiskImpl.NEGDISK_R, material, id);
     }
 
     @Override
@@ -29,5 +29,7 @@ public class NegDisk extends DiskImpl{
     public Vector3f getAcceleration(){
         return Vector3f.ZERO;
     }
+
+    
     
 }

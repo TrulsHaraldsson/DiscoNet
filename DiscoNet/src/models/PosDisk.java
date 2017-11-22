@@ -18,8 +18,8 @@ public class PosDisk extends DiskImpl{
     
     private int pointsLeft = 5;
     
-    public PosDisk(Material material, Material dotMaterial) {
-        super(DiskImpl.POSDISK_R, material);
+    public PosDisk(Material material, Material dotMaterial, int id) {
+        super(DiskImpl.POSDISK_R, material, id);
         Cylinder cyl = new Cylinder(32, 32, 2.5f, DISK_HEIGHT, true);
         Geometry temp = new Geometry("dot1", cyl);
         

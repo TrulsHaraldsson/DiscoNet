@@ -10,7 +10,6 @@ import api.DiskStateListener;
 import api.GameStateEmitter;
 import api.GameStateListener;
 import api.MoveDirection;
-import api.models.Player;
 import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreEmitter;
@@ -46,17 +45,17 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     }
 
     @Override
-    public void notifyPlayerMove(Player player, MoveDirection direction, boolean isPressed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void simpleInitApp() {
         // TODO
     }
 
     PlayerMoveListener getPlayerMoveListener() {
         return this;
+    }
+
+    @Override
+    public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
