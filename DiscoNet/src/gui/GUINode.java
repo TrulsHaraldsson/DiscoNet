@@ -31,6 +31,9 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     public void initGUI(AssetManager assetManager, AppSettings appSettings){
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         
+        System.out.println("Width = " + appSettings.getWidth());
+        System.out.println("Height = " + appSettings.getHeight());
+        
         txtTime = new BitmapText(guiFont, false);
         txtTime.setSize(guiFont.getCharSet().getRenderedSize() * 4);
         txtTime.setText("TIME:");
@@ -47,14 +50,13 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
         txtInfo.setLocalTranslation(appSettings.getWidth()*0.01f, appSettings.getHeight()*0.40f, 0);
         
         txtSetupText = new BitmapText(guiFont, false);
-        txtSetupText.setSize(guiFont.getCharSet().getRenderedSize() * 4);
         txtSetupText.setText("WAITING FOR GAME TO START");
         txtSetupText.setColor(ColorRGBA.White);
+        
+        float size = (float)appSettings.getWidth() / guiFont.getCharSet().getRenderedSize() / 0.9f;
+        txtSetupText.setSize(size);
         txtSetupText.setLocalTranslation(appSettings.getWidth()*0.5f - txtSetupText.getLineWidth() / 2, 
                 appSettings.getHeight()*0.50f + txtSetupText.getLineHeight() / 2, 0);
-        
-        //super.attachChild(txtPoint);
-        //super.attachChild(txtTime);
     }
     
     @Override
