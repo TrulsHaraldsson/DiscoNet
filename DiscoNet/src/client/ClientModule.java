@@ -77,7 +77,12 @@ public class ClientModule extends SimpleApplication implements
 
     @Override
     public void notifyDiskState(List<DiskState> diskStates) {
-        playState.notifyDiskState(diskStates);
+        if(playState.isEnabled()){
+            playState.notifyDiskState(diskStates);
+        } else if (setupState.isEnabled()){
+            setupState.notifyDiskState(diskStates);
+        }
+        
     }
     
     @Override
