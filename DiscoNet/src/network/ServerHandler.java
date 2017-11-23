@@ -127,10 +127,13 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 }
             });
             try {
-                server.broadcast(new InitMessage(result.get()));
+                InitMessage im = new InitMessage(result.get());
+                System.out.println("init Players sent: " + im.getPlayers());
+                server.broadcast(im);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
+            System.out.println("Init message broadcasted.");
         } else if (m instanceof InitAckMessage){
             // TODO: Notify servermodule another ack arrived. servermodule decides when state is changed.
         }
