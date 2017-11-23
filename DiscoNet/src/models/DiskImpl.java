@@ -73,10 +73,14 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
 
     @Override
     public void integrate(float tpf) {
-        // TODO: Calculate new velocity based on acceleration
+        Vector3f dV = new Vector3f(acceleration.x * tpf, acceleration.y * tpf, 0);
+        // Calculate a delta velocity based on acceleration
+        
+        velocity.addLocal(dV);
+        // Add delta velocity to current velocity
         
         Vector3f t = new Vector3f(velocity.x * tpf, velocity.y * tpf, 0);
-        // Calculate translation 
+        // Calculate translation based on velocity
         
         velocity.mult(FRICTION);
         // Simulate friction by reducing velocity by some fraction

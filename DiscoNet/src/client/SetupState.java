@@ -14,6 +14,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.ArrayList;
 import java.util.List;
 import models.BoardImpl;
 import models.DiskImpl;
@@ -25,6 +26,7 @@ import models.DiskImpl;
 public class SetupState extends BaseAppState implements DiskStateListener{
 
     ClientModule app;
+    ArrayList<DiskImpl> disks;
     
     @Override
     protected void initialize(Application app) {
@@ -34,6 +36,10 @@ public class SetupState extends BaseAppState implements DiskStateListener{
     @Override
     protected void cleanup(Application app) {
         System.out.println("SetupState cleanup");
+    }
+    
+    public List<DiskImpl> getInitiateDisks(){
+        return disks;
     }
 
     @Override
