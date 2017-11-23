@@ -120,10 +120,19 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
             });
         } else if (m instanceof RequestStartMessage){
             System.out.println("Initiating launch!");
-            List<DiskState> diskStates = new ArrayList();
-            server.broadcast(new InitMessage(diskStates));
+            Future<List<DiskState>> result = serverModule.enqueue(new Callable(){
+                @Override
+                public Object call() throws Exception{
+                    return serverModule.getPlayerDiskStates();
+                }
+            });
+            try {
+                server.broadcast(new InitMessage(result.get()));
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
         } else if (m instanceof InitAckMessage){
-            // TODO: Check if all players ready, if so, send out gamestate play message
+            // TODO: Notify servermodule another ack arrived. servermodule decides when state is changed.
         }
     }
     
