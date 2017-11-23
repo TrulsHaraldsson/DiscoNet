@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import models.BoardImpl;
 import models.DiskImpl;
+import models.SetupInitiater;
 
 /**
  *
@@ -26,7 +27,7 @@ import models.DiskImpl;
 public class SetupState extends BaseAppState implements DiskStateListener{
 
     ClientModule app;
-    ArrayList<DiskImpl> disks;
+    List<DiskImpl> disks;
     
     @Override
     protected void initialize(Application app) {
@@ -41,14 +42,16 @@ public class SetupState extends BaseAppState implements DiskStateListener{
     public List<DiskImpl> getInitiateDisks(){
         return disks;
     }
-
+    
     @Override
     protected void onEnable() {
         System.out.println("SetupState enabled");
         
+        disks = SetupInitiater.getDisks();
+        
         Node root = app.getRootNode();
         // Create empty board
-        BoardImpl board = new BoardImpl(app.getAssetManager());
+        BoardImpl board = SetupInitiater.getBoard();
         root.attachChild(board);
         
         // Set board invisible
