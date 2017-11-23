@@ -12,6 +12,7 @@ import api.TimeListener;
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.math.FastMath;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     private BitmapText txtPoint;
     private BitmapText txtTime;
     private BitmapText txtSetupText;
+    private BitmapText txtPlayerHint;
+    private float gameTime = 0.0f;
+    private GameState state;
     
     public void initGUI(AssetManager assetManager, AppSettings appSettings){
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -45,13 +49,27 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
         txtSetupText = new BitmapText(guiFont, false);
         txtSetupText.setText("WAITING FOR GAME TO START");
         scaleProperlyToWindowSize(txtSetupText, width, charsetRenderSize);
-        txtSetupText.setLocalTranslation(appSettings.getWidth()*0.5f - txtSetupText.getLineWidth() / 2, 
-                appSettings.getHeight()*0.50f + txtSetupText.getLineHeight() / 2, 0);        
+        txtSetupText.setLocalTranslation(appSettings.getWidth()*0.5f - txtSetupText.getLineWidth() / 2.0f, 
+                appSettings.getHeight()*0.50f + txtSetupText.getLineHeight() / 2.0f, 0);
+        
+        txtPlayerHint = new BitmapText(guiFont, false);
+        txtPlayerHint.setText("PRESS ENTER");
+        scaleProperlyToWindowSize(txtPlayerHint, width, charsetRenderSize);
+        txtPlayerHint.setLocalTranslation(appSettings.getWidth()*0.5f - txtPlayerHint.getLineWidth() / 2.0f, 
+                appSettings.getHeight()*0.30f + txtPlayerHint.getLineHeight() / 2.0f, 0);
     }
     
     private void scaleProperlyToWindowSize(BitmapText text, float widthWindow, float charsetRenderSize){
         float size = widthWindow / charsetRenderSize;
         text.setSize(size);
+    }
+    
+    public void update(float tpf){
+        gameTime += tpf;
+        
+        if(state == GameState.SETUP){
+            txtPlayerHint.setAlpha(FastMath.abs(FastMath.sin(gameTime/0.5f)));
+        }
     }
     
     @Override
@@ -78,18 +96,22 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
 
     @Override
     public void notifyGameState(GameState state) {
+        this.state = state;
         switch(state){
             case PLAY:
                 super.attachChild(txtTime);
                 super.attachChild(txtPoint);
                 super.detachChild(txtSetupText);
+                super.detachChild(txtPlayerHint);
                 break;
             case END:
                 break;
             case SETUP:
                 super.attachChild(txtSetupText);
+                super.attachChild(txtPlayerHint);
                 super.detachChild(txtTime);
                 super.detachChild(txtPoint);
+                txtPlayerHint.setAlpha(1f);
                 break;
         } 
     }
