@@ -73,7 +73,7 @@ public class SetupInitiater {
         DiskImpl negDisk;  
         
         for(int i = 0; i < 8; i++){
-            negDisk = new NegDisk(m, i);                
+            negDisk = new NegDisk(m, i + GameConstants.MAX_PLAYERS);                
             negDisk.setLocalTranslation(negativeX[i], negativeY[i], 0);
             negDisks.add(negDisk);
         }
@@ -85,7 +85,7 @@ public class SetupInitiater {
         DiskImpl pDisk;  
         
         for(int i = 0; i < 8; i++){
-            pDisk = new PosDisk(diskM, dotM, i);                
+            pDisk = new PosDisk(diskM, dotM, i + GameConstants.MAX_PLAYERS + negativeX.length);                
             pDisk.setLocalTranslation(positiveX[i],positiveY[i], 0);
             pDisks.add(pDisk);
         }

@@ -41,13 +41,20 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     List<PlayerDisk> players;
     List<Integer> occupiedPositions = new ArrayList<>();
     
+    /**
+     * Creates a player disk and gives it a id.
+     * returns the id.
+     * @return 
+     */
     public int initId(){
         int id = players.size();
-        int pos = random.nextInt(9);
+        // Get random pos for available positions
+        int pos = random.nextInt(GameConstants.MAX_PLAYERS);
         while (occupiedPositions.contains(pos)){
-            pos = random.nextInt(9);
+            pos = random.nextInt(GameConstants.MAX_PLAYERS);
         }
         occupiedPositions.add(pos);
+        
         Material m = SetupInitiater.setupMaterial(assetManager, GameConstants.PLAYER_COLORS[id]);
         PlayerDisk p = new PlayerDisk(m, id);
         p.setLocalTranslation(GameConstants.PLAYER_POSITIONS[pos]);
