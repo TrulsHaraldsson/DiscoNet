@@ -6,7 +6,6 @@
 package models;
 
 import com.jme3.material.Material;
-import com.jme3.math.Vector3f;
 
 /**
  *
