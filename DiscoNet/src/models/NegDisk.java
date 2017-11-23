@@ -6,6 +6,7 @@
 package models;
 
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 
 /**
@@ -18,6 +19,7 @@ public class NegDisk extends DiskImpl{
     
     public NegDisk(Material material, int id) {
         super(DiskImpl.NEGDISK_R, material, id);
+        material.setColor("Color", ColorRGBA.Red);
     }
 
     @Override

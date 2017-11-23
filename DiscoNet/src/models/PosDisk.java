@@ -6,6 +6,7 @@
 package models;
 
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Cylinder;
@@ -47,6 +48,8 @@ public class PosDisk extends DiskImpl{
         temp.move(-offset, offset, DISK_HEIGHT);
         temp.setMaterial(dotMaterial);
         super.attachChild(temp);
+        
+        material.setColor("Color", ColorRGBA.Green);
     }
     
     @Override

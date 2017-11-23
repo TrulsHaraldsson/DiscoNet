@@ -8,16 +8,21 @@ package client;
 import api.DiskState;
 import api.DiskStateListener;
 import com.jme3.app.Application;
-import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import models.BoardImpl;
 import models.DiskImpl;
+import models.GameConstants;
+import models.PlayerDisk;
 
 /**
  *
@@ -31,6 +36,7 @@ public class SetupState extends BaseAppState implements DiskStateListener{
     @Override
     protected void initialize(Application app) {
         this.app = (ClientModule) app;
+        disks = new ArrayList<>();
     }
 
     @Override
@@ -67,10 +73,41 @@ public class SetupState extends BaseAppState implements DiskStateListener{
         app.getInputManager().deleteMapping("RequestStart");
         System.out.println("SetupState disabled");
     }
-
+    
+    /**
+     * Creates playerdisks from diskStates.
+     * TODO: move to models package.
+     * @param diskStates
+     * @param materials
+     * @return 
+     */
+    public static List<PlayerDisk> createPlayerDisks(List<DiskState> diskStates, List<Material> materials) {
+        List<PlayerDisk> players = new ArrayList<>();
+        for (int i = 0; i< diskStates.size(); i++) {
+            DiskState player = diskStates.get(i);
+            Material m = materials.get(i);
+            m.setColor("Color", GameConstants.PLAYER_COLORS[player.getID()]);
+            PlayerDisk p = new PlayerDisk(m, player.getID());
+            p.setLocalTranslation(player.getPosition());
+            p.setAcceleration(player.getAcceleration());
+            p.setVelocity(player.getVelocity());
+            players.add(p);
+        }
+        return players;
+    }
+    
+    /**
+     * only player diskStates
+     * @param diskStates 
+     */
     @Override
     public void notifyDiskState(List<DiskState> diskStates) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Material> materials = new ArrayList<>();
+        for (int i = 0; i< diskStates.size(); i++){
+            Material m = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+            materials.add(m);
+        }
+        disks.addAll(createPlayerDisks(diskStates, materials));
     }
     
 }

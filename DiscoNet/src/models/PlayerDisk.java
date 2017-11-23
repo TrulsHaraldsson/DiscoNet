@@ -6,7 +6,6 @@
 package models;
 
 import com.jme3.material.Material;
-import com.jme3.math.Vector3f;
 
 /**
  *
@@ -14,7 +13,6 @@ import com.jme3.math.Vector3f;
  */
 public class PlayerDisk extends DiskImpl{
     static final float ACCELERATION_MULTIPLIER = 5f;
-    private Vector3f acceleration;
     
     public PlayerDisk(Material material, int id) {
         super(DiskImpl.PLAYER_R, material, id);
