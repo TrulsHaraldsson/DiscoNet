@@ -26,6 +26,12 @@ public class PlayState extends BaseAppState implements DiskStateListener{
     
     private List<DiskImpl> disks;
     
+    private SetupState setupState;
+    
+    public PlayState(SetupState setupState){
+        this.setupState = setupState;
+    }
+    
     @Override
     protected void initialize(Application app) {
         this.app = (ClientModule) app;
@@ -51,6 +57,7 @@ public class PlayState extends BaseAppState implements DiskStateListener{
     @Override
     protected void onEnable() {
         bindKeys();
+        disks = setupState.getInitiateDisks();
         System.out.println("PlayState enabled");
     }
 
@@ -60,6 +67,14 @@ public class PlayState extends BaseAppState implements DiskStateListener{
         disks.clear();
         System.out.println("PlayState disabled");
     }
+    
+    @Override
+    public void update(float tpf){
+        for(DiskImpl disk : disks){
+            disk.integrate(tpf);
+        }
+    }
+    
     
     private void bindKeys(){
         // Add key mappings

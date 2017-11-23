@@ -73,6 +73,8 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
 
     @Override
     public void integrate(float tpf) {
+        // TODO: Calculate new velocity based on acceleration
+        
         Vector3f t = new Vector3f(velocity.x * tpf, velocity.y * tpf, 0);
         // Calculate translation 
         

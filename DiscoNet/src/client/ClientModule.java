@@ -35,9 +35,9 @@ public class ClientModule extends SimpleApplication implements
     ArrayList<PlayerMoveListener> playerMoveListeners = new ArrayList<>();
     private final GUINode gui = new GUINode();
     
-    private final PlayState playState = new PlayState();
-    private final EndState endState = new EndState();
-    private final SetupState setupState = new SetupState();
+    private final PlayState playState;
+    private final EndState endState;
+    private final SetupState setupState;
     private final ClientHandler client;
     
     private ActionListener actionListener;
@@ -49,6 +49,9 @@ public class ClientModule extends SimpleApplication implements
     public ClientModule(IDProvider idProvider, ClientHandler ch){
         this.idProvider = idProvider;
         this.client = ch;
+        setupState = new SetupState();
+        playState = new PlayState(setupState);
+        endState = new EndState();
     }
     
     private void initActionListener(){
