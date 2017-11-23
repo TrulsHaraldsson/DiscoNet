@@ -21,10 +21,13 @@ import api.TimeEmitter;
 import api.TimeListener;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import models.DiskImpl;
+import models.GameConstants;
 import models.PlayerDisk;
+import models.SetupInitiater;
 
 /**
  *
@@ -36,8 +39,8 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     List<PlayerDisk> players;
     
     public int initId(){
-        Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         int id = players.size();
+        Material m = SetupInitiater.setupMaterial(assetManager, GameConstants.PLAYER_COLORS[id]);
         players.add(new PlayerDisk(m, id));
         return id;
     }

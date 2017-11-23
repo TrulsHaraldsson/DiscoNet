@@ -5,11 +5,11 @@
  */
 package models;
 
-import com.jme3.app.Application;
+import api.DiskState;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,7 +32,36 @@ public class SetupInitiater {
         return new BoardImpl(asset);
     }
     
-    public static List<DiskImpl> getDisks(Material negM, Material posM, Material dotM){
+    public static Material setupMaterial(AssetManager assetManager, ColorRGBA color){
+        Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        m.setColor("Color", color);
+        return m;
+    }
+    
+    /**
+     * Creates playerdisks from diskStates.
+     * @param diskStates
+     * @param assetManager
+     * @return 
+     */
+    public static List<PlayerDisk> createPlayerDisks(List<DiskState> diskStates, AssetManager assetManager) {
+        List<PlayerDisk> players = new ArrayList<>();
+        for (int i = 0; i< diskStates.size(); i++) {
+            DiskState player = diskStates.get(i);
+            Material m = setupMaterial(assetManager, GameConstants.PLAYER_COLORS[player.getID()]);
+            PlayerDisk p = new PlayerDisk(m, player.getID());
+            p.setLocalTranslation(player.getPosition());
+            p.setAcceleration(player.getAcceleration());
+            p.setVelocity(player.getVelocity());
+            players.add(p);
+        }
+        return players;
+    }
+    
+    public static List<DiskImpl> getPassiveDisks(AssetManager assetManager){
+        Material negM = setupMaterial(assetManager, ColorRGBA.Red);
+        Material posM = setupMaterial(assetManager, ColorRGBA.Green);
+        Material dotM = setupMaterial(assetManager, ColorRGBA.White);
         List<DiskImpl> list = new ArrayList<>();
         list.addAll(getNegative(negM));
         list.addAll(getPositive(posM, dotM));

@@ -11,18 +11,10 @@ import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import models.BoardImpl;
 import models.DiskImpl;
-import models.GameConstants;
-import models.PlayerDisk;
 import models.SetupInitiater;
 
 /**
@@ -53,13 +45,7 @@ public class SetupState extends BaseAppState implements DiskStateListener{
     @Override
     protected void onEnable() {
         System.out.println("SetupState enabled");
-        Material mNeg = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        Material mPos = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        Material mDot = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mDot.setColor("Color", ColorRGBA.White);
-        mNeg.setColor("Color", ColorRGBA.Red);
-        mPos.setColor("Color", ColorRGBA.Green);
-        disks = SetupInitiater.getDisks(mNeg, mPos, mDot);
+        disks = SetupInitiater.getPassiveDisks(app.getAssetManager());
         
         Node root = app.getRootNode();
         // Create empty board
@@ -84,39 +70,12 @@ public class SetupState extends BaseAppState implements DiskStateListener{
     }
     
     /**
-     * Creates playerdisks from diskStates.
-     * TODO: move to models package.
-     * @param diskStates
-     * @param materials
-     * @return 
-     */
-    public static List<PlayerDisk> createPlayerDisks(List<DiskState> diskStates, List<Material> materials) {
-        List<PlayerDisk> players = new ArrayList<>();
-        for (int i = 0; i< diskStates.size(); i++) {
-            DiskState player = diskStates.get(i);
-            Material m = materials.get(i);
-            m.setColor("Color", GameConstants.PLAYER_COLORS[player.getID()]);
-            PlayerDisk p = new PlayerDisk(m, player.getID());
-            p.setLocalTranslation(player.getPosition());
-            p.setAcceleration(player.getAcceleration());
-            p.setVelocity(player.getVelocity());
-            players.add(p);
-        }
-        return players;
-    }
-    
-    /**
      * only player diskStates
      * @param diskStates 
      */
     @Override
     public void notifyDiskState(List<DiskState> diskStates) {
-        List<Material> materials = new ArrayList<>();
-        for (int i = 0; i< diskStates.size(); i++){
-            Material m = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-            materials.add(m);
-        }
-        disks.addAll(createPlayerDisks(diskStates, materials));
+        disks.addAll(SetupInitiater.createPlayerDisks(diskStates, app.getAssetManager()));
         // Add all disks to board.
         for (DiskImpl disk : disks) {
             board.attachChild(disk);
