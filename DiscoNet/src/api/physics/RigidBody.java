@@ -19,13 +19,18 @@ public interface RigidBody {
     
     void integrate(float tpf);
     
+    void translate(Vector3f offset);
+    
+    Vector3f getPosition();
+    
+    void setPosition(Vector3f position);
+    
     Vector3f getVelocity();
     
     void setVelocity(Vector3f velocity);
     
-    void translate(Vector3f offset);
-    
-    Vector3f getCenterOfMass();
-    
     Vector3f getAcceleration();
+    
+    void setAcceleration(Vector3f acceleration);
+    
 }

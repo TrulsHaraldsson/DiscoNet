@@ -59,9 +59,4 @@ public class PosDisk extends DiskImpl{
         }
     }
     
-    @Override
-    public Vector3f getAcceleration(){
-        return Vector3f.ZERO;
-    }
-    
 }

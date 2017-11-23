@@ -31,9 +31,6 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     public void initGUI(AssetManager assetManager, AppSettings appSettings){
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         
-        System.out.println("Width = " + appSettings.getWidth());
-        System.out.println("Height = " + appSettings.getHeight());
-        
         txtTime = new BitmapText(guiFont, false);
         txtTime.setSize(guiFont.getCharSet().getRenderedSize() * 4);
         txtTime.setText("TIME:");
