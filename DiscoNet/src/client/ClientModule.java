@@ -169,5 +169,8 @@ public class ClientModule extends SimpleApplication implements
         return this.myID;
     }
     
-
+    @Override
+    public void simpleUpdate(float tpf) {
+        gui.update(tpf);
+    }
 }
