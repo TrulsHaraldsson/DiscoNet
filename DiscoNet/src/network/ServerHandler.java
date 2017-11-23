@@ -31,9 +31,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.messages.InitMessage;
 import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
+import network.messages.RequestStartMessage;
 import server.ServerModule;
 
 /**
@@ -84,6 +86,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
      * @param source
      * @param m 
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void messageReceived(HostedConnection source, final Message m) {
         if (m instanceof JoinMessage){                
@@ -114,6 +117,9 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                     return true;
                 }
             });
+        } else if (m instanceof RequestStartMessage){
+            List<DiskState> diskStates = new ArrayList();
+            server.broadcast(new InitMessage(diskStates));
         }
     }
     

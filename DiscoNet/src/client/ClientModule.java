@@ -141,4 +141,9 @@ public class ClientModule extends SimpleApplication implements
         System.out.println("Finally new ID!" + id);
     }
 
+    public int getID() {
+        return this.myID;
+    }
+    
+
 }
