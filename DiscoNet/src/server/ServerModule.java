@@ -24,6 +24,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import models.DiskImpl;
 import models.GameConstants;
 import models.PlayerDisk;
@@ -35,13 +36,22 @@ import models.SetupInitiater;
  */
 public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, IDProvider{
     
+    private final Random random = new Random();
     List<DiskImpl> disks;
     List<PlayerDisk> players;
+    List<Integer> occupiedPositions = new ArrayList<>();
     
     public int initId(){
         int id = players.size();
+        int pos = random.nextInt(9);
+        while (occupiedPositions.contains(pos)){
+            pos = random.nextInt(9);
+        }
+        occupiedPositions.add(pos);
         Material m = SetupInitiater.setupMaterial(assetManager, GameConstants.PLAYER_COLORS[id]);
-        players.add(new PlayerDisk(m, id));
+        PlayerDisk p = new PlayerDisk(m, id);
+        p.setLocalTranslation(GameConstants.PLAYER_POSITIONS[pos]);
+        players.add(p);
         return id;
     }
     
