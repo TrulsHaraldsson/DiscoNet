@@ -25,11 +25,4 @@ public class NegDisk extends DiskImpl{
         return REWARD;
     }
     
-    @Override
-    public Vector3f getAcceleration(){
-        return Vector3f.ZERO;
-    }
-
-    
-    
 }

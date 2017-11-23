@@ -37,6 +37,7 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
     private final int id;
     
     private Vector3f velocity = new Vector3f(0.0f, 0.0f, 0.0f);
+    protected Vector3f acceleration = new Vector3f(0.0f,0.0f, 0.0f);
     
     public DiskImpl(float radius, Material material, int id){
         super.setName("disk#" + numberOfDisks++);
@@ -81,6 +82,26 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
         super.move(t);
         // Translate the position
     }
+    
+    @Override
+    public void translate(Vector3f offset){
+        super.move(offset);
+    }
+    
+    @Override
+    public int getID() {
+        return this.id;
+    }
+    
+    @Override
+    public Vector3f getPosition(){
+        return this.getWorldTranslation();
+    }
+    
+    @Override
+    public void setPosition(Vector3f position){
+        super.setLocalTranslation(position);
+    } 
 
     @Override
     public Vector3f getVelocity() {
@@ -92,18 +113,14 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
         this.velocity = velocity;
     }
     
+    
     @Override
-    public void translate(Vector3f offset){
-        super.move(offset);
+    public Vector3f getAcceleration(){
+        return acceleration;
     }
     
     @Override
-    public Vector3f getCenterOfMass(){
-        return this.getWorldTranslation();
-    }
-    
-    @Override
-    public int getID() {
-        return this.id;
+    public void setAcceleration(Vector3f acceleration){
+        this.acceleration = acceleration;
     }
 }

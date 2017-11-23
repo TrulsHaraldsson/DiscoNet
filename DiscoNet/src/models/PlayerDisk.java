@@ -34,10 +34,5 @@ public class PlayerDisk extends DiskImpl{
         float a = (pressed) ? ACCELERATION_MULTIPLIER : - ACCELERATION_MULTIPLIER;
         this.acceleration.addLocal(0, a, 0);
     }
-
-    @Override
-    public Vector3f getAcceleration() {
-        return acceleration;
-    }
     
 }

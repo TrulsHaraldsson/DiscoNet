@@ -13,6 +13,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import java.util.List;
+import models.DiskImpl;
 import models.PlayerDisk;
 
 /**
@@ -22,6 +23,9 @@ import models.PlayerDisk;
 public class PlayState extends BaseAppState implements DiskStateListener{
     private ClientModule app;
     private List<PlayerDisk> players;
+    
+    private List<DiskImpl> disks;
+    
     @Override
     protected void initialize(Application app) {
         this.app = (ClientModule) app;
@@ -53,6 +57,7 @@ public class PlayState extends BaseAppState implements DiskStateListener{
     @Override
     protected void onDisable() {
         unbindKeys();
+        disks.clear();
         System.out.println("PlayState disabled");
     }
     
@@ -77,7 +82,15 @@ public class PlayState extends BaseAppState implements DiskStateListener{
 
     @Override
     public void notifyDiskState(List<DiskState> diskStates) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(DiskState diskState : diskStates){
+            for(DiskImpl disk : disks){
+                if(disk.getID() == diskState.getID()){
+                    disk.setPosition(diskState.getPosition());
+                    disk.setVelocity(diskState.getVelocity());
+                    disk.setAcceleration(diskState.getAcceleration());
+                }
+            }
+        }
     }
     
 }
