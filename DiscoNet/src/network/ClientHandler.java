@@ -172,4 +172,8 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         myClient.send(new JoinMessage());
     }
     
+    public void destroy(){
+        myClient.close();
+    }
+    
 }

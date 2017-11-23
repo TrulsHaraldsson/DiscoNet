@@ -150,6 +150,13 @@ public class ClientModule extends SimpleApplication implements
         setDisplayStatView(false);
         
         idProvider.requestID(this);
+        
+    }
+    
+    @Override
+    public void destroy(){
+        client.destroy();
+        super.destroy();
     }
 
     @Override

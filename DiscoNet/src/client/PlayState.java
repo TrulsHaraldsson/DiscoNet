@@ -73,8 +73,7 @@ public class PlayState extends BaseAppState implements DiskStateListener{
         for(DiskImpl disk : disks){
             disk.integrate(tpf);
         }
-    }
-    
+    }  
     
     private void bindKeys(){
         // Add key mappings
