@@ -5,6 +5,7 @@
  */
 package network;
 
+import api.DiskState;
 import com.jme3.network.serializing.Serializer;
 import network.messages.DiskStateMessage;
 import network.messages.GameStateMessage;
@@ -37,5 +38,6 @@ public class NetworkUtils {
         Serializer.registerClass(PlayerMoveMessage.class);
         Serializer.registerClass(DiskStateMessage.class);
         Serializer.registerClass(RequestStartMessage.class);
+        Serializer.registerClass(DiskState.class);
     }
 }

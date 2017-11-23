@@ -6,17 +6,22 @@
 package api;
 
 import com.jme3.math.Vector3f;
+import com.jme3.network.serializing.Serializable;
 import models.DiskImpl;
 
 /**
  *
  * @author truls
  */
+@Serializable
 public class DiskState {
-    private final Vector3f pos;
-    private final Vector3f velocity;
-    private final Vector3f acceleration;
-    private final int id;
+    private Vector3f pos;
+    private Vector3f velocity;
+    private Vector3f acceleration;
+    private int id;
+    
+    public DiskState(){
+    }
 
     public DiskState(DiskImpl d) {
         this.pos = d.getPosition();

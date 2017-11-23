@@ -15,17 +15,16 @@ import java.util.List;
  */
 @Serializable
 public class InitMessage extends AbstractTCPMessage {
-    private final List<DiskState> players;
+    private List<DiskState> players;
 
     public InitMessage() {
-        this.players = null;
     }
     
     public InitMessage(List<DiskState> diskState) {
         this.players = diskState;
     }
     
-    public List<DiskState> getplayers(){
+    public List<DiskState> getPlayers(){
         return players;
     }
 }
