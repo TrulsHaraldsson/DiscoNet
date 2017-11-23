@@ -122,10 +122,12 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             });                     
         } else if(m instanceof InitMessage){
             //Respond to server with own id
+            System.out.println(((InitMessage) m).toString());
+            System.out.println("init players received id: " + ((InitMessage)m).getPlayers().get(0).getID());
             Future<Integer> result = diskStateListener.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {
-                    diskStateListener.notifyDiskState(((DiskStateMessage)m).getDiskStates());
+                    diskStateListener.notifyDiskState(((InitMessage)m).getPlayers());
                     return diskStateListener.getID();
                 }
             });
@@ -170,6 +172,10 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     public void requestID(IDRequester idr) {
         this.idRequester = idr;
         myClient.send(new JoinMessage());
+    }
+    
+    public void destroy(){
+        myClient.close();
     }
     
 }

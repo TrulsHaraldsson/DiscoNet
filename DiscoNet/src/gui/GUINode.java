@@ -31,29 +31,34 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     public void initGUI(AssetManager assetManager, AppSettings appSettings){
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         
+        float width = (float)appSettings.getWidth();
+        float charsetRenderSize = guiFont.getCharSet().getRenderedSize();
+        
         txtTime = new BitmapText(guiFont, false);
-        txtTime.setSize(guiFont.getCharSet().getRenderedSize() * 4);
         txtTime.setText("TIME:");
+        //scaleProperlyToWindowSize(txtTime, width, charsetRenderSize, 0.1f);
         txtTime.setLocalTranslation(appSettings.getWidth()*0.01f, appSettings.getHeight()*0.95f, 0);
         
         txtPoint = new BitmapText(guiFont, false);
-        txtPoint.setSize(guiFont.getCharSet().getRenderedSize() * 4);
         txtPoint.setText("POINTS:");
+        //scaleProperlyToWindowSize(txtPoint, width, charsetRenderSize, 0.1f);
         txtPoint.setLocalTranslation(appSettings.getWidth()*0.01f, appSettings.getHeight()*0.80f, 0);
         
         txtInfo = new BitmapText(guiFont, false);
-        txtInfo.setSize(guiFont.getCharSet().getRenderedSize() * 4);
         txtInfo.setText("PRESS P\nTO PLAY\nAGAIN OR\nE TO EXIT:");
+        //scaleProperlyToWindowSize(txtInfo, width, charsetRenderSize, 0.1f);
         txtInfo.setLocalTranslation(appSettings.getWidth()*0.01f, appSettings.getHeight()*0.40f, 0);
         
         txtSetupText = new BitmapText(guiFont, false);
         txtSetupText.setText("WAITING FOR GAME TO START");
-        txtSetupText.setColor(ColorRGBA.White);
-        
-        float size = (float)appSettings.getWidth() / guiFont.getCharSet().getRenderedSize() / 0.9f;
-        txtSetupText.setSize(size);
+        scaleProperlyToWindowSize(txtSetupText, width, charsetRenderSize, 0.9f);
         txtSetupText.setLocalTranslation(appSettings.getWidth()*0.5f - txtSetupText.getLineWidth() / 2, 
-                appSettings.getHeight()*0.50f + txtSetupText.getLineHeight() / 2, 0);
+                appSettings.getHeight()*0.50f + txtSetupText.getLineHeight() / 2, 0);        
+    }
+    
+    private void scaleProperlyToWindowSize(BitmapText text, float widthWindow, float charsetRenderSize, float scale){
+            float size = widthWindow / charsetRenderSize / scale;
+            text.setSize(size);
     }
     
     @Override
@@ -87,9 +92,12 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
                 super.attachChild(txtInfo);
             case SETUP:
                 super.attachChild(txtSetupText);
-                super.detachChild(txtTime);
+                super.attachChild(txtTime);
+                super.attachChild(txtInfo);
+                super.attachChild(txtPoint);
+                /*super.detachChild(txtTime);
                 super.detachChild(txtInfo);
-                super.detachChild(txtPoint);
+                super.detachChild(txtPoint);*/
                 break;
         } 
     }
