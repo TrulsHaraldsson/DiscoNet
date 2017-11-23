@@ -36,6 +36,7 @@ import network.messages.InitMessage;
 import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
+import network.messages.RequestStartMessage;
 import network.messages.StartMessage;
 
 /**
@@ -150,6 +151,10 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         } else {
             System.out.println("This message does not exist!");
         }
+    }
+    
+    public void sendRequestStartMessage(){
+        myClient.send(new RequestStartMessage());
     }
 
     public PlayerMoveListener getPlayerMoveListener(){

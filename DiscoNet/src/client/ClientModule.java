@@ -23,6 +23,7 @@ import gui.GUINode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import network.ClientHandler;
 
 /**
  *
@@ -37,6 +38,7 @@ public class ClientModule extends SimpleApplication implements
     private final PlayState playState = new PlayState();
     private final EndState endState = new EndState();
     private final SetupState setupState = new SetupState();
+    private final ClientHandler client;
     
     private ActionListener actionListener;
     
@@ -44,8 +46,9 @@ public class ClientModule extends SimpleApplication implements
     
     private IDProvider idProvider;
     
-    public ClientModule(IDProvider idProvider){
+    public ClientModule(IDProvider idProvider, ClientHandler ch){
         this.idProvider = idProvider;
+        this.client = ch;
     }
     
     private void initActionListener(){
@@ -57,7 +60,18 @@ public class ClientModule extends SimpleApplication implements
                 } else if (name.equals("Down")){
                 } else if (name.equals("Left")){
                 } else if (name.equals("Right")){
+                } else if (name.equals("RequestStart") && !keyPressed){
+                    System.out.println("Enter pressed");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("lol");
+                            client.sendRequestStartMessage();
+                        }
+                    }).start();
+                    
                 }
+               
             }
         };
     }
