@@ -38,6 +38,7 @@ public class BoardImpl extends Node implements Board {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.White);
         board.setMaterial(mat);
+        board.setLocalTranslation(new Vector3f(0,0,FRAME_THICKNESS/2));
         super.attachChild(board);
         createFrame(assetManager);
     }

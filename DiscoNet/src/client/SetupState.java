@@ -23,6 +23,7 @@ import models.BoardImpl;
 import models.DiskImpl;
 import models.GameConstants;
 import models.PlayerDisk;
+import models.SetupInitiater;
 
 /**
  *
@@ -31,7 +32,8 @@ import models.PlayerDisk;
 public class SetupState extends BaseAppState implements DiskStateListener{
 
     ClientModule app;
-    ArrayList<DiskImpl> disks;
+    List<DiskImpl> disks;
+    Node board;
     
     @Override
     protected void initialize(Application app) {
@@ -47,18 +49,23 @@ public class SetupState extends BaseAppState implements DiskStateListener{
     public List<DiskImpl> getInitiateDisks(){
         return disks;
     }
-
+    
     @Override
     protected void onEnable() {
         System.out.println("SetupState enabled");
+        Material mNeg = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mPos = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mNeg.setColor("Color", ColorRGBA.Red);
+        mPos.setColor("Color", ColorRGBA.Green);
+        disks = SetupInitiater.getDisks(mNeg, mPos);
         
         Node root = app.getRootNode();
         // Create empty board
-        BoardImpl board = new BoardImpl(app.getAssetManager());
+        board = SetupInitiater.getBoard(app.getAssetManager());
         root.attachChild(board);
         
         // Set board invisible
-        board.setCullHint(Spatial.CullHint.Always);
+        //board.setCullHint(Spatial.CullHint.Always);
         
         //Add key bindings
         app.getInputManager().addMapping("RequestStart", new KeyTrigger(KeyInput.KEY_RETURN));
@@ -108,6 +115,13 @@ public class SetupState extends BaseAppState implements DiskStateListener{
             materials.add(m);
         }
         disks.addAll(createPlayerDisks(diskStates, materials));
+        // Add all disks to board.
+        for (DiskImpl disk : disks) {
+            board.attachChild(disk);
+            //disk.setLocalTranslation(0, 0, 100);
+            
+        }
+        System.out.println(disks.size() + " Disks added to board.");
     }
     
 }

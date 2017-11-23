@@ -49,7 +49,6 @@ public class PosDisk extends DiskImpl{
         temp.setMaterial(dotMaterial);
         super.attachChild(temp);
         
-        material.setColor("Color", ColorRGBA.Green);
     }
     
     @Override
