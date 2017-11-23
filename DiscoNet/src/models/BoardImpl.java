@@ -22,10 +22,9 @@ import com.jme3.scene.shape.Box;
 public class BoardImpl extends Node implements Board {
     
     // thickness of the sides of the frame
-    public static final float FRAME_THICKNESS = 24f; 
+    public static final float FRAME_THICKNESS = GameConstants.FRAME_THICKNESS / 2f; 
     // width (and height) of the free area inside the frame, where disks move
-    public static final float FREE_AREA_WIDTH = 492f / 2f; 
-    public static final float FREE_AREA_THICKNESS = 10f;
+    public static final float FREE_AREA_WIDTH = GameConstants.FREE_AREA_WIDTH / 2f; 
     // total outer width (and height) of the frame
     public static final float FRAME_SIZE = FREE_AREA_WIDTH + 2f * FRAME_THICKNESS; 
     
@@ -34,11 +33,11 @@ public class BoardImpl extends Node implements Board {
     private final Geometry board;
     
     public BoardImpl(AssetManager assetManager) {
-        board = new Geometry(NAME, new Box(FREE_AREA_WIDTH, FREE_AREA_WIDTH, FREE_AREA_THICKNESS));
+        board = new Geometry(NAME, new Box(FREE_AREA_WIDTH, FREE_AREA_WIDTH, 0));
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.White);
         board.setMaterial(mat);
-        board.setLocalTranslation(new Vector3f(0,0,FRAME_THICKNESS/2));
+        board.setLocalTranslation(new Vector3f(0,0, - FRAME_THICKNESS));
         super.attachChild(board);
         createFrame(assetManager);
     }

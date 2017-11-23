@@ -20,32 +20,32 @@ public class PosDisk extends DiskImpl{
     private int pointsLeft = 5;
     
     public PosDisk(Material material, Material dotMaterial, int id) {
-        super(DiskImpl.POSDISK_R, material, id);
-        Cylinder cyl = new Cylinder(32, 32, 2.5f, DISK_HEIGHT, true);
+        super(GameConstants.POSDISK_R, material, id);
+        Cylinder cyl = new Cylinder(32, 32, 2.5f, GameConstants.DISK_HEIGHT / 10f, true);
         Geometry temp = new Geometry("dot1", cyl);
         
-        temp.move(0, 0, DISK_HEIGHT);
+        temp.move(0, 0, GameConstants.DISK_HEIGHT/2);
         temp.setMaterial(dotMaterial);
         super.attachChild(temp);
         
-        float offset = POSDISK_R / 2.0f * 0.7f;
+        float offset = GameConstants.POSDISK_R / 2.0f * 0.7f;
         temp = new Geometry("dot2", cyl);
-        temp.move(offset, offset, DISK_HEIGHT);
+        temp.move(offset, offset, GameConstants.DISK_HEIGHT/2);
         temp.setMaterial(dotMaterial);
         super.attachChild(temp);
         
         temp = new Geometry("dot3", cyl);
-        temp.move(offset, -offset, DISK_HEIGHT);
+        temp.move(offset, -offset, GameConstants.DISK_HEIGHT/2);
         temp.setMaterial(dotMaterial);
         super.attachChild(temp);
         
         temp = new Geometry("dot4", cyl);
-        temp.move(-offset, -offset, DISK_HEIGHT);
+        temp.move(-offset, -offset, GameConstants.DISK_HEIGHT/2);
         temp.setMaterial(dotMaterial);
         super.attachChild(temp);
         
         temp = new Geometry("dot5", cyl);
-        temp.move(-offset, offset, DISK_HEIGHT);
+        temp.move(-offset, offset, GameConstants.DISK_HEIGHT/2);
         temp.setMaterial(dotMaterial);
         super.attachChild(temp);
         

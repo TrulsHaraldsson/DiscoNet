@@ -20,10 +20,6 @@ import com.jme3.scene.Node;
  */
 public abstract class DiskImpl extends Node implements Disk, RigidBody{
     
-    protected static final float PLAYER_R = 20f; // radius of a player's disk
-    protected static final float POSDISK_R = 16f; // radius of a positive disk
-    protected static final float NEGDISK_R = 16f; // radius of a negative disk
-    protected static final int DISK_HEIGHT = 1;
     private static final float MAX_SPEED = 300.0f;
     private static final float FRICTION = 0.9985f;
     
@@ -44,7 +40,7 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
         this.radius = radius;
         this.mass = radius * radius * FastMath.PI * DENSITY;
         this.id = id;
-        Cylinder cyl = new Cylinder(32, 32, radius, DISK_HEIGHT, true);
+        Cylinder cyl = new Cylinder(32, 32, radius, GameConstants.DISK_HEIGHT, true);
         disk = new Geometry(super.getName() + "geometry", cyl);
         disk.setMaterial(material);
         super.attachChild(disk);

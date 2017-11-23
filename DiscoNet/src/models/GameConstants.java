@@ -27,6 +27,8 @@ public class GameConstants {
     static final float PLAYER_COORD = FREE_AREA_WIDTH / 6;
     static final float POSNEG_MAX_COORD = FREE_AREA_WIDTH / 3;
     static final float POSNEG_BETWEEN_COORD = PLAYER_COORD;
+    
+    static final float DISK_HEIGHT = FRAME_THICKNESS;
 
     static final float PLAYER_R = 20f; // radius of a player's disk
     static final float POSDISK_R = 16f; // radius of a positive disk

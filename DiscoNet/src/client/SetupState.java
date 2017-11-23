@@ -55,9 +55,11 @@ public class SetupState extends BaseAppState implements DiskStateListener{
         System.out.println("SetupState enabled");
         Material mNeg = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         Material mPos = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mDot = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mDot.setColor("Color", ColorRGBA.White);
         mNeg.setColor("Color", ColorRGBA.Red);
         mPos.setColor("Color", ColorRGBA.Green);
-        disks = SetupInitiater.getDisks(mNeg, mPos);
+        disks = SetupInitiater.getDisks(mNeg, mPos, mDot);
         
         Node root = app.getRootNode();
         // Create empty board
