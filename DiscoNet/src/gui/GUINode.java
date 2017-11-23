@@ -28,6 +28,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     private BitmapText txtSetupText;
     private BitmapText txtPlayerHint;
     private float gameTime = 0.0f;
+    private GameState state;
     
     public void initGUI(AssetManager assetManager, AppSettings appSettings){
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -65,7 +66,10 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     
     public void update(float tpf){
         gameTime += tpf;
-        txtPlayerHint.setAlpha(FastMath.abs(FastMath.sin(gameTime/0.5f)));
+        
+        if(state == GameState.SETUP){
+            txtPlayerHint.setAlpha(FastMath.abs(FastMath.sin(gameTime/0.5f)));
+        }
     }
     
     @Override
@@ -92,6 +96,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
 
     @Override
     public void notifyGameState(GameState state) {
+        this.state = state;
         switch(state){
             case PLAY:
                 super.attachChild(txtTime);
@@ -106,6 +111,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
                 super.attachChild(txtPlayerHint);
                 super.detachChild(txtTime);
                 super.detachChild(txtPoint);
+                txtPlayerHint.setAlpha(1f);
                 break;
         } 
     }
