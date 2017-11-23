@@ -21,7 +21,7 @@ public class DiskState {
     public DiskState(DiskImpl d) {
         this.pos = d.getPosition();
         this.velocity = d.getVelocity();
-        this.acceleration = null;
+        this.acceleration = d.getAcceleration();
         this.id = d.getID();
     }
     

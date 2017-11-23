@@ -26,6 +26,8 @@ import com.jme3.network.Network;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import static network.NetworkUtils.*;
 import network.messages.DiskStateMessage;
 import network.messages.GameStateMessage;
@@ -34,6 +36,7 @@ import network.messages.InitMessage;
 import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
+import network.messages.RequestStartMessage;
 import network.messages.StartMessage;
 
 /**
@@ -100,12 +103,13 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         this.timeListener = (ClientModule) timeListener;
     }
     
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void messageReceived(Client source, final Message m) {
         if(m instanceof JoinAckMessage){
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
             if (joinAckMessage.getJoined()){
-                idRequester.setID(joinAckMessage.getID());                
+                idRequester.setID(joinAckMessage.getID());  
             }            
             idRequester = null;
         } else if (m instanceof GameStateMessage){
@@ -118,15 +122,22 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             });                     
         } else if(m instanceof InitMessage){
             //Respond to server with own id
-            diskStateListener.enqueue(new Callable() {
+            Future<Integer> result = diskStateListener.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {
                     diskStateListener.notifyDiskState(((DiskStateMessage)m).getDiskStates());
-                    return true;
+                    return diskStateListener.getID();
                 }
             });
-            // TODO: Do this here!? or when we are sure we are ready?
-            //myClient.send(new InitAckMessage(myClient.getId()));
+            // Send init message back when done setting up.
+            try {
+                myClient.send(new InitAckMessage(result.get()));
+            } catch (InterruptedException | ExecutionException e) {
+                //TODO: Die!?
+                System.out.println("Something wrong when sending InitAck.");
+                e.printStackTrace();
+            }
+            
             
         } else if (m instanceof DiskStateMessage){
             diskStateListener.enqueue(new Callable() {
@@ -140,6 +151,10 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         } else {
             System.out.println("This message does not exist!");
         }
+    }
+    
+    public void sendRequestStartMessage(){
+        myClient.send(new RequestStartMessage());
     }
 
     public PlayerMoveListener getPlayerMoveListener(){

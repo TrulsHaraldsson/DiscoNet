@@ -31,9 +31,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.messages.InitAckMessage;
+import network.messages.InitMessage;
 import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
+import network.messages.RequestStartMessage;
 import server.ServerModule;
 
 /**
@@ -69,7 +72,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         System.out.println("Server started");
         // add a listener that reacts on incoming network packets
         server.addMessageListener(this, JoinMessage.class,
-                PlayerMoveMessage.class);
+                PlayerMoveMessage.class, RequestStartMessage.class, InitAckMessage.class);
         System.out.println("ServerListener activated and added to server");
     }
     
@@ -84,6 +87,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
      * @param source
      * @param m 
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void messageReceived(HostedConnection source, final Message m) {
         if (m instanceof JoinMessage){                
@@ -114,6 +118,12 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                     return true;
                 }
             });
+        } else if (m instanceof RequestStartMessage){
+            System.out.println("Initiating launch!");
+            List<DiskState> diskStates = new ArrayList();
+            server.broadcast(new InitMessage(diskStates));
+        } else if (m instanceof InitAckMessage){
+            // TODO: Check if all players ready, if so, send out gamestate play message
         }
     }
     

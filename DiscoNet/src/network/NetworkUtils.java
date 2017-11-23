@@ -13,6 +13,7 @@ import network.messages.InitMessage;
 import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
+import network.messages.RequestStartMessage;
 import network.messages.StartMessage;
 
 /**
@@ -35,5 +36,6 @@ public class NetworkUtils {
         Serializer.registerClass(StartMessage.class);
         Serializer.registerClass(PlayerMoveMessage.class);
         Serializer.registerClass(DiskStateMessage.class);
+        Serializer.registerClass(RequestStartMessage.class);
     }
 }

@@ -15,7 +15,7 @@ public class BootstrapClient {
     
     public static void main(String[] args){
         ClientHandler ch = new ClientHandler();
-        ClientModule cm = new ClientModule(ch);
+        ClientModule cm = new ClientModule(ch, ch);
         
         // ClienModule emmits player moves to client handler
         cm.addPlayerMoveListener(ch);
