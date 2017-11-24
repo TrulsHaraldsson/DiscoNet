@@ -23,6 +23,7 @@ import api.physics.CollisionDetectionListener;
 import api.physics.CollisionResult;
 import com.jme3.app.SimpleApplication;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import models.DiskConverter;
 import models.DiskImpl;
@@ -104,7 +105,9 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
 
     @Override
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PlayerDisk disk = (PlayerDisk)this.playState.getDisk(diskID);
+        disk.accelerate(direction, isPressed);  
+        server.broadcastDiskStates(DiskConverter.convertDisksToDiskStates(new ArrayList<DiskImpl> ((Collection<? extends DiskImpl>) disk)));
     }
 
     @Override
@@ -125,13 +128,7 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     }
     
     public void afterCollisions(final List<DiskImpl> disks) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                server.broadcastDiskStates(DiskConverter.convertDisksToDiskStates(disks));
-            }
-        }).start();
-        
+        server.broadcastDiskStates(DiskConverter.convertDisksToDiskStates(disks));        
     }
     
     public void onPlayerReady(int id){

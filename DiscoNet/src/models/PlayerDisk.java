@@ -5,6 +5,7 @@
  */
 package models;
 
+import api.MoveDirection;
 import com.jme3.material.Material;
 
 /**
@@ -38,4 +39,22 @@ public class PlayerDisk extends DiskImpl{
         this.acceleration.addLocal(0, a, 0);
     }
     
+    public void accelerate(MoveDirection direction, boolean b){        
+        switch(direction){
+            case UP : 
+                accelerateY(b);
+                break;
+            case DOWN : 
+                accelerateY(!b);
+                break;
+            case LEFT :
+                accelerateX(!b);
+                break;
+            case RIGHT : 
+                accelerateX(b);
+                break;
+            default :
+                break;
+        }
+    }
 }
