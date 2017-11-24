@@ -6,6 +6,7 @@
 package api.physics;
 
 import java.util.List;
+import models.DiskImpl;
 
 /**
  *
@@ -14,5 +15,5 @@ import java.util.List;
 public interface CollisionSolver {
     
     void resolveCollisions(List<CollisionResult> collisions, float tpf);
-    
+    boolean collisionWithWall(DiskImpl disk, float edgeSize);
 }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import models.DiskConverter;
 import models.DiskImpl;
+import models.GameConstants;
 import models.PlayerDisk;
 import models.SetupInitiater;
 import physics.CollisionDetectorImpl;
@@ -62,6 +63,12 @@ public class PlayState extends BaseAppState implements TimeEmitter{
         collisionSolver.resolveCollisions(collisions, tpf);
         // List that holds the disks that collided
         final List<DiskImpl> collidedDisks = new ArrayList<>();
+        for (DiskImpl disk : disks) {
+            boolean collision = collisionSolver.collisionWithWall(disk, GameConstants.FREE_AREA_WIDTH/2f);
+            if (collision) {
+                collidedDisks.add(disk);
+            }
+        }
         // Calculate the new points
         for (CollisionResult collision : collisions) {
             DiskImpl d1 = (DiskImpl) collision.getFirst();
@@ -116,6 +123,7 @@ public class PlayState extends BaseAppState implements TimeEmitter{
                 SetupInitiater.setInitSpeed(disk);
             }
         }
+        
     }
 
     @Override
