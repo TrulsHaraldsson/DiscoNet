@@ -121,12 +121,7 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         return setupState.getPlayerDiskStates();
     }
 
-    public void afterCollisions(List<CollisionResult> collisions) {
-        final List<DiskImpl> disks = new ArrayList<>();
-        for (CollisionResult collision : collisions) {
-            disks.add((DiskImpl) collision.getFirst());
-            disks.add((DiskImpl) collision.getSecond());
-        }
+    public void afterCollisions(final List<DiskImpl> disks) {
         new Thread(new Runnable() {
             @Override
             public void run() {

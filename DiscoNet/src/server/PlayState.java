@@ -12,9 +12,11 @@ import api.physics.CollisionResult;
 import api.physics.CollisionSolver;
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
+import java.util.ArrayList;
 import java.util.List;
 import models.DiskConverter;
 import models.DiskImpl;
+import models.PlayerDisk;
 import physics.CollisionDetectorImpl;
 import physics.CollisionResultImpl;
 import physics.CollisionSolverImpl;
@@ -50,7 +52,23 @@ public class PlayState extends BaseAppState {
         DiskUpdate.updateDisks(disks, tpf);
         List<CollisionResult> collisions = collisionDetector.getCollisions((List<Disk>)(List<?>) disks, tpf);
         collisionSolver.resolveCollisions(collisions, tpf);
-        app.afterCollisions(collisions);
+        // List that holds the disks that collided
+        final List<DiskImpl> collidedDisks = new ArrayList<>();
+        // Calculate the new points
+        for (CollisionResult collision : collisions) {
+            DiskImpl d1 = (DiskImpl) collision.getFirst();
+            DiskImpl d2 = (DiskImpl) collision.getSecond();
+            if (d1 instanceof PlayerDisk){
+                ((PlayerDisk)d1).addPoints(d2.reward());
+            } else if (d2 instanceof PlayerDisk){
+                ((PlayerDisk)d2).addPoints(d1.reward());
+            }
+            disks.add(d1);
+            disks.add(d2);
+        }
+        // notify network a collision occured
+        app.afterCollisions(collidedDisks);
+        
     }
     
     @Override

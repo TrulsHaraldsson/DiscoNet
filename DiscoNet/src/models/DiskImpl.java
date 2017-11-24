@@ -33,6 +33,8 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
     private final Geometry disk;
     private final int id;
     
+    protected int points;
+    
     private Vector3f velocity = new Vector3f(0.0f, 0.0f, 0.0f);
     protected Vector3f acceleration = new Vector3f(0.0f,0.0f, 0.0f);
     
@@ -134,4 +136,8 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
         this.acceleration = acceleration;
     }
     
+    @Override
+    public int getPoints(){
+        return this.points;
+    }
 }

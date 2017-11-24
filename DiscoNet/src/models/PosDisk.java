@@ -17,10 +17,10 @@ import com.jme3.scene.shape.Cylinder;
  */
 public class PosDisk extends DiskImpl{
     
-    private int pointsLeft = 5;
-    
     public PosDisk(Material material, Material dotMaterial, int id) {
         super(GameConstants.POSDISK_R, material, id);
+        points = 5;
+        
         Cylinder cyl = new Cylinder(32, 32, 2.5f, GameConstants.DISK_HEIGHT / 10f, true);
         Geometry temp = new Geometry("dot1", cyl);
         
@@ -53,11 +53,11 @@ public class PosDisk extends DiskImpl{
     
     @Override
     public int reward() {
-        if(pointsLeft == 0){
+        if(points == 0){
             return 0;
         }else {
-            super.detachChildNamed("dot" + pointsLeft);
-            return pointsLeft--;
+            super.detachChildNamed("dot" + points);
+            return points--;
         }
     }
     
