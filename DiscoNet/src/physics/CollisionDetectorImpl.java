@@ -86,10 +86,7 @@ public class CollisionDetectorImpl implements CollisionDetector{
             }
         }
         
-        for(CollisionResult collision : results){
-            notifyListeners(collision);
-        }
-        
+        notifyListeners(results);
         return results;
     }
 
@@ -98,9 +95,9 @@ public class CollisionDetectorImpl implements CollisionDetector{
         listeners.add(listener);
     }
     
-    private void notifyListeners(CollisionResult collision){
+    private void notifyListeners(List<CollisionResult> collisions){
         for(CollisionDetectionListener listener : listeners){
-            listener.onCollision(collision);
+            listener.onCollision(collisions);
         }
     }
     

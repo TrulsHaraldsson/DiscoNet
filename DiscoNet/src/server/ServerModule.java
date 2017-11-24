@@ -18,33 +18,41 @@ import api.ScoreEmitter;
 import api.ScoreListener;
 import api.TimeEmitter;
 import api.TimeListener;
+import api.physics.CollisionDetectionListener;
+import api.physics.CollisionResult;
 import com.jme3.app.SimpleApplication;
 import java.util.ArrayList;
 import java.util.List;
+import models.DiskConverter;
 import models.DiskImpl;
 import models.PlayerDisk;
+import network.ServerHandler;
 
 /**
  *
  * @author truls
  */
-public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, IDProvider{
-    
-    List<DiskImpl> disks;
-    List<PlayerDisk> players;
+public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, 
+        TimeEmitter, PlayerMoveListener, IDProvider {
     
     private final PlayState playState;
     //private final EndState endState;
     private final SetupState setupState;
     
-    public ServerModule(){
-        
+    private ServerHandler server;
+    
+    public ServerModule(ServerHandler server){
+        this.server = server;
         playState = new PlayState();
         setupState = new SetupState();
     }
     
     public int initId(){
         return setupState.initId();
+    }
+    
+    public List<DiskImpl> getInitDisks(){
+        return setupState.getDisks();
     }
     
     
@@ -94,21 +102,28 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
-    /**
-     * returns all disks as diskStates.
-     * @return 
-     */
     public synchronized List<DiskState> getDiskStates() {
-        List<DiskState> diskStates = new ArrayList();
-        for (DiskImpl disk: disks) {
-            diskStates.add(new DiskState(disk));
-        }
-        return diskStates;
+        return playState.getDiskStates();
     }
     
     public synchronized List<DiskState> getPlayerDiskStates(){
         return setupState.getPlayerDiskStates();
+    }
+
+    public void afterCollisions(List<CollisionResult> collisions) {
+        final List<DiskImpl> disks = new ArrayList<>();
+        for (CollisionResult collision : collisions) {
+            disks.add((DiskImpl) collision.getFirst());
+            disks.add((DiskImpl) collision.getSecond());
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("lol");
+                server.broadcastDiskStates(DiskConverter.convertDisksToDiskStates(disks));
+            }
+        }).start();
+        
     }
     
     

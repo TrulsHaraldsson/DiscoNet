@@ -33,8 +33,6 @@ public class SetupState extends BaseAppState{
     @Override
     protected void initialize(Application app) {
         this.app = (ServerModule) app;
-        disks = new ArrayList();
-        players = new ArrayList();
     }
     
     /**
@@ -70,6 +68,9 @@ public class SetupState extends BaseAppState{
         return diskStates;
     }
     
+    /**
+     * call this when about to change to playState.
+     */
     public void getReadyToStart(){
         disks.addAll(SetupInitiater.getPassiveDisks(app.getAssetManager()));
         disks.addAll(players);
@@ -84,14 +85,21 @@ public class SetupState extends BaseAppState{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * things that should happen everytime setupState starts
+     */
     @Override
     protected void onEnable() {
-        //TODO 
+        disks = new ArrayList();
+        players = new ArrayList(); 
     }
 
+    /**
+     * things that should happen everytime setupState ends (and playState begins)
+     */
     @Override
     protected void onDisable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getReadyToStart(); //TODO: check if supposed to be here or called from servermodule
     }
     
 }
