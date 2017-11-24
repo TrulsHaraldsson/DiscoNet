@@ -110,7 +110,9 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
         PlayerDisk disk = (PlayerDisk)this.playState.getDisk(diskID);
         disk.accelerate(direction, isPressed); 
-        notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(new ArrayList<DiskImpl> ((Collection<? extends DiskImpl>) disk)));
+        ArrayList<DiskImpl> list = new ArrayList<>();
+        list.add(disk);
+        notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(list));
     }
 
     @Override

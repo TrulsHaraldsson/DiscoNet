@@ -27,6 +27,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     private BitmapText txtTime;
     private BitmapText txtSetupText;
     private BitmapText txtPlayerHint;
+    private float animationTime = 0.0f;
     private float gameTime = 0.0f;
     private GameState state;
     
@@ -65,15 +66,19 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     }
     
     public void update(float tpf){
-        gameTime += tpf;
+        animationTime += tpf;
         
         if(state == GameState.SETUP){
-            txtPlayerHint.setAlpha(FastMath.abs(FastMath.sin(gameTime/0.5f)));
+            txtPlayerHint.setAlpha(FastMath.abs(FastMath.sin(animationTime/0.5f)));
+        }else if( state == GameState.PLAY){
+            gameTime -= tpf;
+            notifyTime(gameTime);
         }
     }
     
     @Override
     public void notifyTime(float time) {
+        gameTime = time;
         int sec = (int) (time % 100f);
         int hundreds = (int) (time * 100f) % 100;
         
