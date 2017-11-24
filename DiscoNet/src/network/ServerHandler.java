@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.messages.DiskStateMessage;
 import network.messages.InitAckMessage;
 import network.messages.InitMessage;
 import network.messages.JoinAckMessage;
@@ -47,6 +48,9 @@ import server.ServerModule;
  */
 public class ServerHandler implements MessageListener<HostedConnection>, PlayerMoveEmitter, GameStateListener, ScoreListener, TimeListener, DiskStateListener {
     private ServerModule serverModule;
+    
+    private Thread heartBeatThread;
+    private boolean playing = false;
     
     private Server server;
     
@@ -119,7 +123,10 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 }
             });
         } else if (m instanceof RequestStartMessage){
-            System.out.println("Initiating launch!");
+            List<DiskState> players = serverModule.getPlayerDiskStates();
+            InitMessage im = new InitMessage(players);
+            server.broadcast(im);
+            /*
             Future<List<DiskState>> result = serverModule.enqueue(new Callable(){
                 @Override
                 public Object call() throws Exception{
@@ -132,7 +139,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 server.broadcast(im);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
-            }
+            }*/
             System.out.println("Init message broadcasted.");
         } else if (m instanceof InitAckMessage){
             // TODO: Notify servermodule another ack arrived. servermodule decides when state is changed.
@@ -182,6 +189,38 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
 
     public ScoreListener getScoreListener() {
         return this;
+    }
+    
+    public void startHeartBeat(){
+        playing = true;
+        heartBeatThread = new Thread(new HeartBeatSender());
+        heartBeatThread.start();
+    }
+    
+    public void stopHeartBeat(){
+        playing = false;
+    }
+    
+    /**
+     * Sends out a heart beat to all clients every TIME_SLEEPING seconds.
+     */
+    private class HeartBeatSender implements Runnable {
+
+        private final int TIME_SLEEPING = 100; // timebetween heartbeats
+
+        @Override
+        @SuppressWarnings("SleepWhileInLoop")
+        public void run() {
+            while (playing) { //TODO: Swith to check playState.isEnabled? 
+                try {
+                    Thread.sleep(TIME_SLEEPING);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                DiskStateMessage m = new DiskStateMessage(serverModule.getDiskStates());
+                server.broadcast(m);
+            }
+        }
     }
     
 }

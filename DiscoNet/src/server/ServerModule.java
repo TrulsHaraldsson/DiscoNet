@@ -13,22 +13,16 @@ import api.GameStateListener;
 import api.IDProvider;
 import api.IDRequester;
 import api.MoveDirection;
-import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreEmitter;
 import api.ScoreListener;
 import api.TimeEmitter;
 import api.TimeListener;
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import models.DiskImpl;
-import models.GameConstants;
 import models.PlayerDisk;
-import models.SetupInitiater;
 
 /**
  *
@@ -36,31 +30,23 @@ import models.SetupInitiater;
  */
 public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, TimeEmitter, PlayerMoveListener, IDProvider{
     
-    private final Random random = new Random();
     List<DiskImpl> disks;
     List<PlayerDisk> players;
-    List<Integer> occupiedPositions = new ArrayList<>();
     
-    /**
-     * Creates a player disk and gives it a id.
-     * returns the id.
-     * @return 
-     */
-    public int initId(){
-        int id = players.size();
-        // Get random pos for available positions
-        int pos = random.nextInt(GameConstants.MAX_PLAYERS);
-        while (occupiedPositions.contains(pos)){
-            pos = random.nextInt(GameConstants.MAX_PLAYERS);
-        }
-        occupiedPositions.add(pos);
+    private final PlayState playState;
+    //private final EndState endState;
+    private final SetupState setupState;
+    
+    public ServerModule(){
         
-        Material m = SetupInitiater.setupMaterial(assetManager, GameConstants.PLAYER_COLORS[id]);
-        PlayerDisk p = new PlayerDisk(m, id);
-        p.setLocalTranslation(GameConstants.PLAYER_POSITIONS[pos]);
-        players.add(p);
-        return id;
+        playState = new PlayState();
+        setupState = new SetupState();
     }
+    
+    public int initId(){
+        return setupState.initId();
+    }
+    
     
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
@@ -84,8 +70,14 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
 
     @Override
     public void simpleInitApp() {
-        disks = new ArrayList();
-        players = new ArrayList();
+        playState.setEnabled(false);
+        //endState.setEnabled(false);
+        setupState.setEnabled(true);
+        
+        stateManager.attach(playState);
+        //stateManager.attach(endState);
+        stateManager.attach(setupState);
+        
     }
 
     PlayerMoveListener getPlayerMoveListener() {
@@ -102,7 +94,12 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<DiskState> getDiskStates() {
+    
+    /**
+     * returns all disks as diskStates.
+     * @return 
+     */
+    public synchronized List<DiskState> getDiskStates() {
         List<DiskState> diskStates = new ArrayList();
         for (DiskImpl disk: disks) {
             diskStates.add(new DiskState(disk));
@@ -110,12 +107,8 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         return diskStates;
     }
     
-    public List<DiskState> getPlayerDiskStates() {
-        List<DiskState> diskStates = new ArrayList();
-        for (DiskImpl disk: players) {
-            diskStates.add(new DiskState(disk));
-        }
-        return diskStates;
+    public synchronized List<DiskState> getPlayerDiskStates(){
+        return setupState.getPlayerDiskStates();
     }
     
     
