@@ -216,10 +216,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         heartBeatThread.start();
     }
     
-    public void stopHeartBeat(){
-        playing = false;
-    }
-    
     /**
      * Sends out a heart beat to all clients every TIME_SLEEPING seconds.
      */
@@ -230,7 +226,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         @Override
         @SuppressWarnings("SleepWhileInLoop")
         public void run() {
-            while (playing) { //TODO: Swith to check playState.isEnabled? 
+            while (serverModule.isPlaying()) { //TODO: Swith to check playState.isEnabled? 
                 try {
                     Thread.sleep(TIME_SLEEPING);
                 } catch (InterruptedException e) {

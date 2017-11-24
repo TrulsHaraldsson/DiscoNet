@@ -121,6 +121,10 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         return setupState.getPlayerDiskStates();
     }
 
+    public synchronized boolean isPlaying(){
+        return playState.isEnabled();
+    }
+    
     public void afterCollisions(final List<DiskImpl> disks) {
         new Thread(new Runnable() {
             @Override
