@@ -16,7 +16,7 @@ public class BootstrapServer {
     
     public static void main(String[] args){
         ServerHandler sh = new ServerHandler();
-        ServerModule sm = new ServerModule(sh);
+        ServerModule sm = new ServerModule();
         
         // Server handler emitts player moves to server
         sh.addPlayerMoveListener(sm.getPlayerMoveListener());
@@ -25,10 +25,10 @@ public class BootstrapServer {
         // to ServerHandler
         sm.addGameStateListener(sh.getGameStateListener());
         sm.addTimeListener(sh.getTimeListener());
-        /*
+        
         sm.addDiskStateListener(sh.getDiskStateListener());
-        sm.addScoreListener(sh.getScoreListener());
-        */
+        //sm.addScoreListener(sh.getScoreListener());
+        
         sm.start(JmeContext.Type.Headless);
     }
 }
