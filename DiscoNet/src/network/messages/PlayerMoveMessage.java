@@ -14,14 +14,10 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class PlayerMoveMessage extends AbstractClientMessage {
-    private final MoveDirection mDirection;
-    private final boolean isPressed;
-
-    public PlayerMoveMessage() {
-        super(-1);
-        this.mDirection = null;
-        this.isPressed = false;
-    }
+    private MoveDirection mDirection;
+    private boolean isPressed;
+    
+    public PlayerMoveMessage(){}
     
     public PlayerMoveMessage(int id, MoveDirection mDirection, boolean isPressed) {
         super(id);

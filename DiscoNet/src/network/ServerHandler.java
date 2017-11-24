@@ -51,8 +51,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
     
     private Server server;
     
-    private ArrayList<Integer> ready;
-    
     public ServerHandler(){
         // init messages
         NetworkUtils.initSerializables();
@@ -67,8 +65,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
             // create and start the server
             server = Network.createServer(NetworkUtils.SERVER_PORT);
             server.start();
-            
-            ready = new ArrayList<Integer>();
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,7 +94,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         
         if (m instanceof JoinMessage){                
             // TODO: send message back to client about if it can join or not.
-            Future<Integer> result = serverModule.enqueue(new Callable(){
+            final Future<Integer> result = serverModule.enqueue(new Callable(){
                 @Override
                 public Object call() throws Exception{
                     return serverModule.initId();
@@ -113,8 +109,17 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
             } catch (ExecutionException e){
                 joinAckMessage = new JoinAckMessage(-1, false);
             }
-            server.broadcast(Filters.equalTo(source), joinAckMessage);              
-
+            
+            serverModule.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    serverModule.onPlayerJoined(result.get());
+                    return true;
+                }
+            });
+            
+            server.broadcast(Filters.equalTo(source), joinAckMessage);    
+            
         } else if (m instanceof PlayerMoveMessage){
             // send to simple application
             serverModule.enqueue(new Callable() {
@@ -143,19 +148,14 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         } else if (m instanceof InitAckMessage){
             System.out.println("Source : " + source);
             System.out.println("Server connections : " + server.getConnections());
-            for(int i = 0; i < server.getConnections().size(); i++){
-                if(server.getConnection(i).getId() == source.getId()){
-                    if(!ready.contains(source.getId())){
-                        ready.add(source.getId());
-                    }
+            
+            serverModule.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    serverModule.onPlayerReady(((InitAckMessage) m).getID());
+                    return true;
                 }
-            }
-            //CAN ALSO USE TIMER IF PPL ARE SLOW.
-            if(ready.size() == server.getConnections().size()){
-                System.out.println("All ready, sending new game state!");
-                server.broadcast(new GameStateMessage(GameState.PLAY));
-            }
-            // TODO: Notify servermodule another ack arrived. servermodule decides when state is changed.
+            });
         }
     }
     
@@ -166,7 +166,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
 
     @Override
     public void notifyGameState(GameState state) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        server.broadcast(new GameStateMessage(GameState.PLAY));
     }
 
     @Override

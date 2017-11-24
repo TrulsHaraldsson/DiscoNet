@@ -12,7 +12,9 @@ package network.messages;
  */
 public class AbstractClientMessage extends AbstractTCPMessage {
 
-    private final int id;
+    private int id;
+    
+    public AbstractClientMessage(){}
     
     public AbstractClientMessage(int id){
         super();
