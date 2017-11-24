@@ -66,7 +66,6 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         return setupState.getDisks();
     }
     
-    
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
         this.gameStateListener = gameStateListener;
@@ -84,7 +83,7 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
 
     @Override
     public void addTimeListener(TimeListener timeListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        playState.addTimeListener(timeListener);
     }
 
     @Override
@@ -129,7 +128,6 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("lol");
                 server.broadcastDiskStates(DiskConverter.convertDisksToDiskStates(disks));
             }
         }).start();
@@ -143,6 +141,9 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         }
         
         if(ready.size() == connections.size()){
+            setupState.setEnabled(false);
+            playState.setEnabled(true);
+            ready.clear();
             gameStateListener.notifyGameState(GameState.PLAY);
         }
     }
