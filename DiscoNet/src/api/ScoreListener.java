@@ -13,5 +13,5 @@ import java.util.Map;
  */
 public interface ScoreListener {
     
-    void notifyScore(Map<String, Integer> scores);
+    void notifyScore(Map<Integer, Integer> scores);
 }

@@ -34,8 +34,7 @@ public class BoardImpl extends Node implements Board {
     
     public BoardImpl(AssetManager assetManager) {
         board = new Geometry(NAME, new Box(FREE_AREA_WIDTH, FREE_AREA_WIDTH, 0));
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.White);
+        Material mat = SetupInitiater.setupMaterial(assetManager, ColorRGBA.White);
         board.setMaterial(mat);
         board.setLocalTranslation(new Vector3f(0,0, - FRAME_THICKNESS));
         super.attachChild(board);
@@ -43,8 +42,7 @@ public class BoardImpl extends Node implements Board {
     }
     
     private void createFrame(AssetManager assetManager){
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Brown);
+        Material mat = SetupInitiater.setupMaterial(assetManager, ColorRGBA.Brown);
         
         Box box = new Box(FRAME_SIZE, FRAME_THICKNESS, FRAME_THICKNESS);
         

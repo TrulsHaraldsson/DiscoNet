@@ -16,6 +16,7 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import java.util.Map;
+import models.GameConstants;
 
 /**
  *
@@ -95,12 +96,13 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     }
 
     @Override
-    public void notifyScore(Map<String, Integer> scores) {
+    public void notifyScore(Map<Integer, Integer> scores) {
         StringBuilder sb = new StringBuilder();
-        for(Map.Entry<String, Integer> s : scores.entrySet()){
-            String row = s.getKey() + ":" + s.getValue() + "\n";
+        for(Map.Entry<Integer, Integer> s : scores.entrySet()){
+            String row = GameConstants.PLAYER_NAMES[s.getKey()] + ":" + s.getValue() + "\n";
             sb.append(row);
         }
+        System.out.println("Text should be set to: " + sb);
         txtPoint.setText(sb); 
     }
 

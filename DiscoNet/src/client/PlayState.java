@@ -7,12 +7,17 @@ package client;
 
 import api.DiskState;
 import api.DiskStateListener;
+import api.ScoreEmitter;
+import api.ScoreListener;
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import models.BoardImpl;
 import models.DiskImpl;
 import models.PlayerDisk;
@@ -21,7 +26,9 @@ import models.PlayerDisk;
  *
  * @author truls
  */
-public class PlayState extends BaseAppState implements DiskStateListener{
+public class PlayState extends BaseAppState implements DiskStateListener, ScoreEmitter{
+    private final List<ScoreListener> scoreListeners = new ArrayList<>();
+    
     private ClientModule app;
     
     private List<DiskImpl> disks;
@@ -104,6 +111,7 @@ public class PlayState extends BaseAppState implements DiskStateListener{
 
     @Override
     public void notifyDiskState(List<DiskState> diskStates) {
+        Map<Integer, Integer> scores = new HashMap();
         for(DiskState diskState : diskStates){
             for(DiskImpl disk : disks){
                 if(disk.getID() == diskState.getID()){
@@ -113,6 +121,24 @@ public class PlayState extends BaseAppState implements DiskStateListener{
                     disk.setPoints(diskState.getPoints());
                 }
             }
+        }
+        // Notify the new scores
+        for (DiskImpl disk : disks) {
+            if(disk instanceof PlayerDisk){
+                scores.put(disk.getID(), disk.getPoints());
+            }
+        }
+        notifyScoreListeners(scores);
+    }
+
+    @Override
+    public void addScoreListener(ScoreListener scoreListener) {
+        scoreListeners.add(scoreListener);
+    }
+    
+    public void notifyScoreListeners(Map<Integer, Integer> scores){
+        for (ScoreListener scoreListener : scoreListeners) {
+            scoreListener.notifyScore(scores);
         }
     }
     

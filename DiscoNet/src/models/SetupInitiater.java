@@ -37,9 +37,15 @@ public class SetupInitiater {
     }
     
     public static Material setupMaterial(AssetManager assetManager, ColorRGBA color){
-        Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        /*Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         m.setColor("Color", color);
-        return m;
+        return m;*/
+        Material material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        material.setBoolean("UseMaterialColors",true);
+        material.setColor("Diffuse", color);
+        material.setFloat("Shininess", 64f);  // [0,128]
+        material.setColor("Specular", color);
+        return material;
     }
     
     /**

@@ -45,4 +45,8 @@ public class GameConstants {
         ColorRGBA.Orange, ColorRGBA.Cyan, ColorRGBA.DarkGray,
          ColorRGBA.Pink, ColorRGBA.Brown, ColorRGBA.LightGray
     };
+    // Matching names
+    public static final String[] PLAYER_NAMES = {
+        "Blue", "Black", "Yellow", "Orange", "Cyan", "DGray", "Pink", "Brown", "LGray"
+    };
 }

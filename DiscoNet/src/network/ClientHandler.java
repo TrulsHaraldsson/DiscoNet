@@ -174,7 +174,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
 
     @Override
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
-        System.out.println("Direction : " + direction.toString());
+        //System.out.println("Direction : " + direction.toString());
         myClient.send(new PlayerMoveMessage(diskID, direction, isPressed));
     }
 

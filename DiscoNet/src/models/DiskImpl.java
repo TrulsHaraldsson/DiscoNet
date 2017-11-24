@@ -86,7 +86,7 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
         Vector3f t = new Vector3f(velocity.x * tpf, velocity.y * tpf, 0);
         // Calculate translation based on velocity
         
-        velocity.mult(1 - (FRICTION_MULTIPLIER * tpf));
+        velocity.multLocal(1 - (FRICTION_MULTIPLIER * tpf));
         // Simulate friction by reducing velocity by some fraction
         
         

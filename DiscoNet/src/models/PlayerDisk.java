@@ -13,7 +13,7 @@ import com.jme3.material.Material;
  * @author truls
  */
 public class PlayerDisk extends DiskImpl{
-    static final float ACCELERATION_MULTIPLIER = 5f;
+    static final float ACCELERATION_MULTIPLIER = 60f;
     
     public PlayerDisk(Material material, int id) {
         super(GameConstants.PLAYER_R, material, id);

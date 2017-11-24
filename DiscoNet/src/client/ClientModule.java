@@ -19,12 +19,12 @@ import api.TimeListener;
 import com.jme3.app.LostFocusBehavior;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.light.DirectionalLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import gui.GUINode;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import network.ClientHandler;
 
 /**
@@ -32,7 +32,7 @@ import network.ClientHandler;
  * @author truls
  */
 public class ClientModule extends SimpleApplication implements 
-        GameStateListener, DiskStateListener, TimeListener, ScoreListener, PlayerMoveEmitter, IDRequester {
+        GameStateListener, DiskStateListener, TimeListener, PlayerMoveEmitter, IDRequester {
 
     PlayerMoveListener playerMoveListeners;
     private final GUINode gui = new GUINode();
@@ -54,6 +54,7 @@ public class ClientModule extends SimpleApplication implements
         setupState = new SetupState();
         playState = new PlayState(setupState);
         endState = new EndState();
+        playState.addScoreListener(gui);
     }
     
     private void initActionListener(){
@@ -122,13 +123,8 @@ public class ClientModule extends SimpleApplication implements
     
     @Override
     public void notifyTime(float time) {
-        System.out.println("ClientModule: time = " + time);
+        //System.out.println("ClientModule: time = " + time);
         gui.notifyTime(time);
-    }
-
-    @Override
-    public void notifyScore(Map<String, Integer> scores) {
-        gui.notifyScore(scores);
     }
 
     @Override
@@ -162,6 +158,12 @@ public class ClientModule extends SimpleApplication implements
         setDisplayStatView(false);
         
         idProvider.requestID(this);
+        
+        // init sunlight
+        DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(new Vector3f(1,1,-2).normalizeLocal());
+        sun.setColor(ColorRGBA.White);
+        rootNode.addLight(sun);
         
         super.setLostFocusBehavior(LostFocusBehavior.Disabled);
     }

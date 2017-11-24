@@ -158,7 +158,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
     }
 
     @Override
-    public void notifyScore(Map<String, Integer> scores) {
+    public void notifyScore(Map<Integer, Integer> scores) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -222,7 +222,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Just beat it");
                 DiskStateMessage m = new DiskStateMessage(serverModule.getDiskStates());
                 server.broadcast(m);
             }
