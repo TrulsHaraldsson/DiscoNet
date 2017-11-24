@@ -13,6 +13,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import java.util.List;
+import models.BoardImpl;
 import models.DiskImpl;
 import models.PlayerDisk;
 
@@ -22,11 +23,11 @@ import models.PlayerDisk;
  */
 public class PlayState extends BaseAppState implements DiskStateListener{
     private ClientModule app;
-    private List<PlayerDisk> players;
     
     private List<DiskImpl> disks;
+    private BoardImpl board;
     
-    private SetupState setupState;
+    private final SetupState setupState;
     
     public PlayState(SetupState setupState){
         this.setupState = setupState;
@@ -36,18 +37,6 @@ public class PlayState extends BaseAppState implements DiskStateListener{
     protected void initialize(Application app) {
         this.app = (ClientModule) app;
     }
-    
-    public void addPlayers(List<DiskState> players){
-        for (DiskState d : players){
-            Material m = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-            PlayerDisk p = new PlayerDisk(m, d.getID());
-            addPlayer(p);
-        }
-    }
-    
-    public void addPlayer(PlayerDisk pd){
-        this.players.add(pd);
-    }
 
     @Override
     protected void cleanup(Application app) {
@@ -56,15 +45,34 @@ public class PlayState extends BaseAppState implements DiskStateListener{
 
     @Override
     protected void onEnable() {
+        System.out.println("PlayState enabled");
         bindKeys();
         disks = setupState.getInitiateDisks();
-        System.out.println("PlayState enabled");
+        board = setupState.getBoard();
+        
+        if(board == null){
+            throw new RuntimeException("Board is not instantiated");
+        }
+        
+        if(disks == null || disks.isEmpty()){
+            throw new RuntimeException("Disks are not instantiated");
+        }
+        
+        app.getRootNode().attachChild(board);
+        
+        // Add all disks to board.
+        for (DiskImpl disk : disks) {
+            board.attachChild(disk);
+        }
+        
+        System.out.println(disks.size() + " Disks added to board.");
     }
 
     @Override
     protected void onDisable() {
         unbindKeys();
         disks.clear();
+        board = null;
         System.out.println("PlayState disabled");
     }
     
