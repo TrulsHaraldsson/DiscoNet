@@ -82,6 +82,7 @@ public class PlayState extends BaseAppState implements TimeEmitter{
         timeSinceLastTimeUpdate += tpf;
         if(timeSinceLastTimeUpdate > notifyGameTimeInterval){
             timeListener.notifyTime(gameTime);
+            timeSinceLastTimeUpdate = 0f;
         }
         
     }

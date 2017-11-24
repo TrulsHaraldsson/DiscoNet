@@ -14,6 +14,7 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class AbstractUDPMessage extends AbstractMessage {
+    
     public AbstractUDPMessage(){
         this.setReliable(false);
     }

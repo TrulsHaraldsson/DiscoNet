@@ -24,9 +24,9 @@ public class BootstrapServer {
         // Server emitts GameStates, DiskStates, Time and Scores
         // to ServerHandler
         sm.addGameStateListener(sh.getGameStateListener());
+        sm.addTimeListener(sh.getTimeListener());
         /*
         sm.addDiskStateListener(sh.getDiskStateListener());
-        sm.addTimeListener(sh.getTimeListener());
         sm.addScoreListener(sh.getScoreListener());
         */
         sm.start(JmeContext.Type.Headless);

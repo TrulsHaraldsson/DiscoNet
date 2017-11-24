@@ -133,20 +133,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
             List<DiskState> players = serverModule.getPlayerDiskStates();
             InitMessage im = new InitMessage(players);
             server.broadcast(im);
-            /*
-            Future<List<DiskState>> result = serverModule.enqueue(new Callable(){
-                @Override
-                public Object call() throws Exception{
-                    return serverModule.getPlayerDiskStates();
-                }
-            });
-            try {
-                InitMessage im = new InitMessage(result.get());
-                System.out.println("init Players sent: " + im.getPlayers());
-                server.broadcast(Filters.equalTo(source), im);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }*/
             System.out.println("Init message broadcasted.");
         } else if (m instanceof InitAckMessage){
             System.out.println("Source : " + source);
@@ -179,6 +165,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
 
     @Override
     public void notifyTime(float time) {
+        System.out.println("ServerHandler time = " + time);
         server.broadcast(new TimeMessage(time));
     }
 

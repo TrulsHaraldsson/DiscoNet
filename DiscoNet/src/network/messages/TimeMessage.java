@@ -5,10 +5,13 @@
  */
 package network.messages;
 
+import com.jme3.network.serializing.Serializable;
+
 /**
  *
  * @author truls
  */
+@Serializable
 public class TimeMessage extends AbstractUDPMessage{
     
     private float time;
@@ -17,5 +20,9 @@ public class TimeMessage extends AbstractUDPMessage{
     
     public TimeMessage(float time){
         this.time = time;
+    }
+    
+    public float getTime(){
+        return time;
     }
 }
