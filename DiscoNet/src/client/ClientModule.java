@@ -94,19 +94,19 @@ public class ClientModule extends SimpleApplication implements
         gui.notifyGameState(state);
         switch(state){
             case PLAY:
-                playState.setEnabled(true);
                 setupState.setEnabled(false);
                 endState.setEnabled(false);
+                playState.setEnabled(true);
                 break;
             case END:
-                endState.setEnabled(true);
-                playState.setEnabled(true);
+                playState.setEnabled(false);
                 setupState.setEnabled(false);
+                endState.setEnabled(true);
                 break;
             case SETUP:
-                setupState.setEnabled(true);
                 playState.setEnabled(false);
                 endState.setEnabled(false);
+                setupState.setEnabled(true);
                 break;
         }
     }

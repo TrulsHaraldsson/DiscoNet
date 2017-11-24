@@ -114,6 +114,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             }            
             idRequester = null;
         } else if (m instanceof GameStateMessage){
+            System.out.println("State received: " + ((GameStateMessage) m).getGameState());
             gameStateListener.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {

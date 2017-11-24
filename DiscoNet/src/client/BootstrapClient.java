@@ -24,7 +24,7 @@ public class BootstrapClient {
         ch.addDiskStateListener(cm);
         ch.addGameStateListener(cm);
         ch.addTimeListener(cm);
-        ch.addScoreListener(cm);
+        //ch.addScoreListener(cm);
         
         cm.start();
     }

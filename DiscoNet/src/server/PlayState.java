@@ -36,7 +36,7 @@ public class PlayState extends BaseAppState implements TimeEmitter{
     CollisionDetector collisionDetector;
     CollisionSolver collisionSolver;
     
-    private TimeListener timeListener;
+    private List<TimeListener> timeListeners = new ArrayList<>();
     private final float notifyGameTimeInterval = 1.0f;
     private float gameTime;
     private float timeSinceLastTimeUpdate;
@@ -90,7 +90,7 @@ public class PlayState extends BaseAppState implements TimeEmitter{
         
         timeSinceLastTimeUpdate += tpf;
         if(timeSinceLastTimeUpdate > notifyGameTimeInterval){
-            timeListener.notifyTime(gameTime);
+            notifyTimeListeners(gameTime);
             timeSinceLastTimeUpdate = 0f;
         }
         
@@ -129,12 +129,18 @@ public class PlayState extends BaseAppState implements TimeEmitter{
 
     @Override
     protected void onDisable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //TODO
     }
 
     @Override
     public void addTimeListener(TimeListener timeListener) {
-        this.timeListener = timeListener;
+        this.timeListeners.add(timeListener);
+    }
+    
+    private void notifyTimeListeners(float time){
+        for (TimeListener timeListener : timeListeners) {
+            timeListener.notifyTime(time);
+        }
     }
     
 }

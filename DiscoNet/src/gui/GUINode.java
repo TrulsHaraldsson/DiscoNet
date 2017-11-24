@@ -102,7 +102,6 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
             String row = GameConstants.PLAYER_NAMES[s.getKey()] + ":" + s.getValue() + "\n";
             sb.append(row);
         }
-        System.out.println("Text should be set to: " + sb);
         txtPoint.setText(sb); 
     }
 

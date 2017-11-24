@@ -32,24 +32,25 @@ import models.PlayerDisk;
  * @author truls
  */
 public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, 
-        TimeEmitter, PlayerMoveListener, IDProvider {
+        TimeEmitter, TimeListener, PlayerMoveListener, IDProvider {
     
     private final List<DiskStateListener> diskStateListeners = new ArrayList<>();
     
     private final PlayState playState;
-    //private final EndState endState;
+    private final EndState endState;
     private final SetupState setupState;
     
     
     public ServerModule(){
         playState = new PlayState();
         setupState = new SetupState();
+        endState = new EndState();
     }
     
     private ArrayList<Integer> connections = new ArrayList<>();
     private ArrayList<Integer> ready = new ArrayList<>();
     
-    private GameStateListener gameStateListener;
+    private List<GameStateListener> gameStateListeners = new ArrayList<>();
     
     /**
      * Creates a player disk and gives it a id.
@@ -64,9 +65,38 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         return setupState.getDisks();
     }
     
+    private void changeGameState(GameState newState){
+        switch(newState){
+            case SETUP:
+                playState.setEnabled(false);
+                endState.setEnabled(false);
+                setupState.setEnabled(true);
+                break;
+            case PLAY:
+                endState.setEnabled(false);
+                setupState.setEnabled(false);
+                playState.setEnabled(true);
+                break;
+            case END:
+                playState.setEnabled(false);
+                setupState.setEnabled(false);
+                endState.setEnabled(true);
+                break;
+            default:
+                break;
+        }
+        notifyGameStateListeners(newState);
+    }
+    
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
-        this.gameStateListener = gameStateListener;
+        this.gameStateListeners.add(gameStateListener);
+    }
+    
+    public void notifyGameStateListeners(GameState gs){
+        for (GameStateListener gameStateListener : gameStateListeners) {
+            gameStateListener.notifyGameState(gs);
+        }
     }
 
     @Override
@@ -93,12 +123,15 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     @Override
     public void simpleInitApp() {
         playState.setEnabled(false);
-        //endState.setEnabled(false);
+        endState.setEnabled(false);
         setupState.setEnabled(true);
         
         stateManager.attach(playState);
-        //stateManager.attach(endState);
+        stateManager.attach(endState);
         stateManager.attach(setupState);
+        
+        
+        playState.addTimeListener(this);
         
     }
 
@@ -143,10 +176,8 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         }
         
         if(ready.size() == connections.size()){
-            setupState.setEnabled(false);
-            playState.setEnabled(true);
+            changeGameState(GameState.PLAY);
             ready.clear();
-            gameStateListener.notifyGameState(GameState.PLAY);
         }
     }
     
@@ -154,6 +185,15 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         if(!connections.contains(id)){
             System.out.println("Player joined id " + id);
             connections.add(id);
+        }
+    }
+    
+
+    @Override
+    public void notifyTime(float time) {
+        if (time <= 0) {
+            changeGameState(GameState.END);
+            System.out.println("Time is over!");
         }
     }
     
