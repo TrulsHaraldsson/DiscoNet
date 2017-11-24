@@ -229,6 +229,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                System.out.println("Just beat it");
                 DiskStateMessage m = new DiskStateMessage(serverModule.getDiskStates());
                 server.broadcast(m);
             }
