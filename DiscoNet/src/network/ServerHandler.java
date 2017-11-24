@@ -9,7 +9,6 @@ import api.DiskState;
 import api.DiskStateListener;
 import api.GameState;
 import api.GameStateListener;
-import api.MoveDirection;
 import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreListener;
@@ -45,9 +44,6 @@ import server.ServerModule;
  */
 public class ServerHandler implements MessageListener<HostedConnection>, PlayerMoveEmitter, GameStateListener, ScoreListener, TimeListener, DiskStateListener {
     private ServerModule serverModule;
-    
-    private Thread heartBeatThread;
-    private boolean playing = false;
     
     private Server server;
     
@@ -171,7 +167,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
 
     @Override
     public void notifyDiskState(List<DiskState> diskStates) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        broadcastDiskStates(diskStates);
     }
     
     public PlayerMoveEmitter getPlayerMoveEmitter(){
@@ -194,7 +190,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         return this;
     }
     
-    public void broadcastDiskStates(final List<DiskState> disks){
+    private void broadcastDiskStates(final List<DiskState> disks){
         new Thread(new Runnable(){
             @Override
             public void run(){
@@ -204,13 +200,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
     }
     
     public void startHeartBeat(){
-        playing = true;
-        heartBeatThread = new Thread(new HeartBeatSender());
-        heartBeatThread.start();
-    }
-    
-    public void stopHeartBeat(){
-        playing = false;
+        new Thread(new HeartBeatSender()).start();
     }
     
     /**
@@ -223,7 +213,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         @Override
         @SuppressWarnings("SleepWhileInLoop")
         public void run() {
-            while (playing) { //TODO: Swith to check playState.isEnabled? 
+            while (serverModule.isPlaying()) { //TODO: Swith to check playState.isEnabled? 
                 try {
                     Thread.sleep(TIME_SLEEPING);
                 } catch (InterruptedException e) {

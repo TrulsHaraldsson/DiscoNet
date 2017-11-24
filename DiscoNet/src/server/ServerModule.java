@@ -19,8 +19,6 @@ import api.ScoreEmitter;
 import api.ScoreListener;
 import api.TimeEmitter;
 import api.TimeListener;
-import api.physics.CollisionDetectionListener;
-import api.physics.CollisionResult;
 import com.jme3.app.SimpleApplication;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +26,6 @@ import java.util.List;
 import models.DiskConverter;
 import models.DiskImpl;
 import models.PlayerDisk;
-import network.ServerHandler;
 
 /**
  *
@@ -37,14 +34,14 @@ import network.ServerHandler;
 public class ServerModule extends SimpleApplication implements GameStateEmitter, DiskStateEmitter, ScoreEmitter, 
         TimeEmitter, PlayerMoveListener, IDProvider {
     
+    private final List<DiskStateListener> diskStateListeners = new ArrayList<>();
+    
     private final PlayState playState;
     //private final EndState endState;
     private final SetupState setupState;
     
-    private ServerHandler server;
     
-    public ServerModule(ServerHandler server){
-        this.server = server;
+    public ServerModule(){
         playState = new PlayState();
         setupState = new SetupState();
     }
@@ -74,7 +71,13 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
 
     @Override
     public void addDiskStateListener(DiskStateListener diskStateListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.diskStateListeners.add(diskStateListener);
+    }
+    
+    public void notifyDiskStateListeners(List<DiskState> diskStates){
+        for (DiskStateListener diskStateListener : diskStateListeners) {
+            diskStateListener.notifyDiskState(diskStates);
+        }
     }
 
     @Override
@@ -106,8 +109,8 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     @Override
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
         PlayerDisk disk = (PlayerDisk)this.playState.getDisk(diskID);
-        disk.accelerate(direction, isPressed);  
-        server.broadcastDiskStates(DiskConverter.convertDisksToDiskStates(new ArrayList<DiskImpl> ((Collection<? extends DiskImpl>) disk)));
+        disk.accelerate(direction, isPressed); 
+        notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(new ArrayList<DiskImpl> ((Collection<? extends DiskImpl>) disk)));
     }
 
     @Override
@@ -123,8 +126,12 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         return setupState.getPlayerDiskStates();
     }
 
+    public synchronized boolean isPlaying(){
+        return playState.isEnabled();
+    }
+    
     public void afterCollisions(final List<DiskImpl> disks) {
-        server.broadcastDiskStates(DiskConverter.convertDisksToDiskStates(disks));        
+        notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(disks));   
     }
     
     public void onPlayerReady(int id){
