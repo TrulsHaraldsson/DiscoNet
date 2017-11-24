@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.messages.GameStateMessage;
 import network.messages.InitAckMessage;
 import network.messages.InitMessage;
 import network.messages.JoinAckMessage;
@@ -50,11 +51,12 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
     
     private Server server;
     
+    private ArrayList<Integer> ready;
+    
     public ServerHandler(){
         // init messages
         NetworkUtils.initSerializables();
-        initServer();
-        
+        initServer();   
     }
     
     
@@ -65,6 +67,9 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
             // create and start the server
             server = Network.createServer(NetworkUtils.SERVER_PORT);
             server.start();
+            
+            ready = new ArrayList<Integer>();
+            
         } catch (IOException e) {
             e.printStackTrace();
             destroy();
@@ -90,6 +95,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
     @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void messageReceived(HostedConnection source, final Message m) {
+        
         if (m instanceof JoinMessage){                
             // TODO: send message back to client about if it can join or not.
             Future<Integer> result = serverModule.enqueue(new Callable(){
@@ -129,12 +135,26 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
             try {
                 InitMessage im = new InitMessage(result.get());
                 System.out.println("init Players sent: " + im.getPlayers());
-                server.broadcast(im);
+                server.broadcast(Filters.equalTo(source), im);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
             System.out.println("Init message broadcasted.");
         } else if (m instanceof InitAckMessage){
+            System.out.println("Source : " + source);
+            System.out.println("Server connections : " + server.getConnections());
+            for(int i = 0; i < server.getConnections().size(); i++){
+                if(server.getConnection(i).getId() == source.getId()){
+                    if(!ready.contains(source.getId())){
+                        ready.add(source.getId());
+                    }
+                }
+            }
+            //CAN ALSO USE TIMER IF PPL ARE SLOW.
+            if(ready.size() == server.getConnections().size()){
+                System.out.println("All ready, sending new game state!");
+                server.broadcast(new GameStateMessage(GameState.PLAY));
+            }
             // TODO: Notify servermodule another ack arrived. servermodule decides when state is changed.
         }
     }
