@@ -14,6 +14,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.List;
+import models.BoardImpl;
 import models.DiskImpl;
 import models.SetupInitiater;
 
@@ -25,7 +26,7 @@ public class SetupState extends BaseAppState implements DiskStateListener{
 
     ClientModule app;
     List<DiskImpl> disks;
-    Node board;
+    BoardImpl board;
     
     @Override
     protected void initialize(Application app) {
@@ -42,6 +43,10 @@ public class SetupState extends BaseAppState implements DiskStateListener{
         return disks;
     }
     
+    public BoardImpl getBoard(){
+        return board;
+    }
+    
     @Override
     protected void onEnable() {
         System.out.println("SetupState enabled");
@@ -50,10 +55,7 @@ public class SetupState extends BaseAppState implements DiskStateListener{
         Node root = app.getRootNode();
         // Create empty board
         board = SetupInitiater.getBoard(app.getAssetManager());
-        root.attachChild(board);
-        
-        // Set board invisible
-        //board.setCullHint(Spatial.CullHint.Always);
+        //root.attachChild(board);
         
         //Add key bindings
         app.getInputManager().addMapping("RequestStart", new KeyTrigger(KeyInput.KEY_RETURN));
@@ -76,13 +78,7 @@ public class SetupState extends BaseAppState implements DiskStateListener{
     @Override
     public void notifyDiskState(List<DiskState> diskStates) {
         disks.addAll(SetupInitiater.createPlayerDisks(diskStates, app.getAssetManager()));
-        // Add all disks to board.
-        for (DiskImpl disk : disks) {
-            board.attachChild(disk);
-            //disk.setLocalTranslation(0, 0, 100);
-            
-        }
-        System.out.println(disks.size() + " Disks added to board.");
+        System.out.println("SetupState: notifyDiskState(): Adding player disks");
     }
     
 }

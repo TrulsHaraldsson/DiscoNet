@@ -85,6 +85,7 @@ public class ClientModule extends SimpleApplication implements
     
     @Override
     public void notifyGameState(GameState state) {
+        System.out.println("Game state : " + state);
         gui.notifyGameState(state);
         switch(state){
             case PLAY:
@@ -145,7 +146,7 @@ public class ClientModule extends SimpleApplication implements
         getCamera().setLocation(new Vector3f(-84f, 0.0f, 720f));
         getCamera().setRotation(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f));
         
-        //flyCam.setEnabled(false);
+        flyCam.setEnabled(false);
         
         setDisplayStatView(false);
         

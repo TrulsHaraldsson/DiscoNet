@@ -14,10 +14,9 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class GameStateMessage extends AbstractTCPMessage {
-    private final GameState state;
+    private GameState state;
 
-    public GameStateMessage() {
-        this.state = null;
+    public GameStateMessage(){
     }
     
     public GameStateMessage(GameState state){

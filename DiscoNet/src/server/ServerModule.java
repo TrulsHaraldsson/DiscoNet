@@ -8,6 +8,7 @@ package server;
 import api.DiskState;
 import api.DiskStateEmitter;
 import api.DiskStateListener;
+import api.GameState;
 import api.GameStateEmitter;
 import api.GameStateListener;
 import api.IDProvider;
@@ -47,6 +48,16 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         setupState = new SetupState();
     }
     
+    private ArrayList<Integer> connections = new ArrayList<>();
+    private ArrayList<Integer> ready = new ArrayList<>();
+    
+    private GameStateListener gameStateListener;
+    
+    /**
+     * Creates a player disk and gives it a id.
+     * returns the id.
+     * @return 
+     */
     public int initId(){
         return setupState.initId();
     }
@@ -58,7 +69,7 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     
     @Override
     public void addGameStateListener(GameStateListener gameStateListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.gameStateListener = gameStateListener;
     }
 
     @Override
@@ -124,6 +135,24 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
             }
         }).start();
         
+    }
+    
+    public void onPlayerReady(int id){
+        if(!ready.contains(id)){
+            System.out.println("Player ready " + id);
+            ready.add(id);
+        }
+        
+        if(ready.size() == connections.size()){
+            gameStateListener.notifyGameState(GameState.PLAY);
+        }
+    }
+    
+    public void onPlayerJoined(int id){
+        if(!connections.contains(id)){
+            System.out.println("Player joined id " + id);
+            connections.add(id);
+        }
     }
     
     

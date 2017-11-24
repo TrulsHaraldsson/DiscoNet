@@ -13,10 +13,8 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class InitAckMessage extends AbstractClientMessage {
-
-    public InitAckMessage() {
-        super(-1);
-    }
+    
+    public InitAckMessage(){}
     
     public InitAckMessage(int id) {
         super(id);
