@@ -52,11 +52,6 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     private ArrayList<Integer> ready = new ArrayList<>();
     
     private GameStateListener gameStateListener;
-    private TimeListener timeListener;
-    
-    private float gameTime = 0.0f;
-    private float notifyGameTimeInterval = 1.0f;
-    private float timeSinceLastTimeUpdate = 0.0f;
     
     /**
      * Creates a player disk and gives it a id.
@@ -89,7 +84,7 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
 
     @Override
     public void addTimeListener(TimeListener timeListener) {
-        this.timeListener = timeListener;
+        playState.addTimeListener(timeListener);
     }
 
     @Override
@@ -101,18 +96,6 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         stateManager.attach(playState);
         //stateManager.attach(endState);
         stateManager.attach(setupState);
-        
-    }
-    
-    @Override
-    public void simpleUpdate(float tpf){
-        gameTime += tpf;
-        
-        timeSinceLastTimeUpdate += tpf;
-        if(timeSinceLastTimeUpdate > notifyGameTimeInterval){
-            timeListener.notifyTime(gameTime);
-            timeSinceLastTimeUpdate = 0.0f;
-        }
         
     }
 
