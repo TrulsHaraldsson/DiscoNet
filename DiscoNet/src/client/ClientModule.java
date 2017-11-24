@@ -93,12 +93,18 @@ public class ClientModule extends SimpleApplication implements
         switch(state){
             case PLAY:
                 playState.setEnabled(true);
+                setupState.setEnabled(false);
+                endState.setEnabled(false);
                 break;
             case END:
                 endState.setEnabled(true);
+                playState.setEnabled(true);
+                setupState.setEnabled(false);
                 break;
             case SETUP:
                 setupState.setEnabled(true);
+                playState.setEnabled(false);
+                endState.setEnabled(false);
                 break;
         }
     }
@@ -115,6 +121,7 @@ public class ClientModule extends SimpleApplication implements
     
     @Override
     public void notifyTime(float time) {
+        System.out.println("ClientModule: time = " + time);
         gui.notifyTime(time);
     }
 

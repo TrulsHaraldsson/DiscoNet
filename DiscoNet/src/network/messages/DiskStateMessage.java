@@ -16,11 +16,9 @@ import java.util.List;
 @Serializable
 public class DiskStateMessage extends AbstractUDPMessage {
 
-    private final List<DiskState> diskStates;
-
-    public DiskStateMessage() {
-        this.diskStates = null;
-    }
+    private List<DiskState> diskStates;
+    
+    public DiskStateMessage(){}
     
     public DiskStateMessage(List<DiskState> diskState) {
         this.diskStates = diskState;

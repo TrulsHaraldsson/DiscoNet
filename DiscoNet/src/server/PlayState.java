@@ -6,6 +6,8 @@
 package server;
 
 import api.DiskState;
+import api.TimeEmitter;
+import api.TimeListener;
 import api.models.Disk;
 import api.physics.CollisionDetector;
 import api.physics.CollisionResult;
@@ -26,11 +28,16 @@ import physics.DiskUpdate;
  *
  * @author hannes
  */
-public class PlayState extends BaseAppState {
+public class PlayState extends BaseAppState implements TimeEmitter{
     private ServerModule app;
     List<DiskImpl> disks;
     CollisionDetector collisionDetector;
     CollisionSolver collisionSolver;
+    
+    private TimeListener timeListener;
+    private final float notifyGameTimeInterval = 1.0f;
+    private float gameTime;
+    private float timeSinceLastTimeUpdate;
     
     @Override
     protected void initialize(Application app) {
@@ -69,6 +76,15 @@ public class PlayState extends BaseAppState {
         // notify network a collision occured
         app.afterCollisions(collidedDisks);
         
+        // Updating game time
+        gameTime -= tpf;
+        
+        timeSinceLastTimeUpdate += tpf;
+        if(timeSinceLastTimeUpdate > notifyGameTimeInterval){
+            timeListener.notifyTime(gameTime);
+            timeSinceLastTimeUpdate = 0f;
+        }
+        
     }
     
     public DiskImpl getDisk(int id){
@@ -92,11 +108,18 @@ public class PlayState extends BaseAppState {
     @Override
     protected void onEnable() {
         disks = app.getInitDisks();
+        gameTime = 30.0f;
+        timeSinceLastTimeUpdate = 1.0f;
     }
 
     @Override
     protected void onDisable() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addTimeListener(TimeListener timeListener) {
+        this.timeListener = timeListener;
     }
     
 }

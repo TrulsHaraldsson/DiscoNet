@@ -38,6 +38,7 @@ import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
 import network.messages.RequestStartMessage;
 import network.messages.StartMessage;
+import network.messages.TimeMessage;
 
 /**
  *
@@ -59,7 +60,6 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         NetworkUtils.initSerializables();
         connectToServer();
         
-        
         myClient.addMessageListener(this, StartMessage.class);
         myClient.addMessageListener(this, InitMessage.class);
         myClient.addMessageListener(this, InitAckMessage.class);
@@ -68,6 +68,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
         myClient.addMessageListener(this, PlayerMoveMessage.class);
         myClient.addMessageListener(this, DiskStateMessage.class);
         myClient.addMessageListener(this, GameStateMessage.class);
+        myClient.addMessageListener(this, TimeMessage.class);
 
     }
 
@@ -150,6 +151,14 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
                 }
             });
             
+        } else if(m instanceof TimeMessage){
+            timeListener.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    timeListener.notifyTime(((TimeMessage) m).getTime());
+                    return true;
+                }
+            });
         } else {
             System.out.println("This message does not exist!");
         }
