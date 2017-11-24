@@ -165,7 +165,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
 
     @Override
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        myClient.send(new PlayerMoveMessage(diskID, direction, isPressed));
     }
 
     @Override

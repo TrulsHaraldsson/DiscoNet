@@ -11,6 +11,7 @@ import api.GameState;
 import api.GameStateListener;
 import api.IDProvider;
 import api.IDRequester;
+import api.MoveDirection;
 import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreListener;
@@ -32,7 +33,7 @@ import network.ClientHandler;
 public class ClientModule extends SimpleApplication implements 
         GameStateListener, DiskStateListener, TimeListener, ScoreListener, PlayerMoveEmitter, IDRequester {
 
-    ArrayList<PlayerMoveListener> playerMoveListeners = new ArrayList<>();
+    PlayerMoveListener playerMoveListeners;
     private final GUINode gui = new GUINode();
     
     private final PlayState playState;
@@ -60,21 +61,23 @@ public class ClientModule extends SimpleApplication implements
             public void onAction(String name, boolean keyPressed, float tpf) {
                 // TODO: Change to only send to server
                 if (name.equals("Up")){
+                    playerMoveListeners.notifyPlayerMove(myID, MoveDirection.UP, keyPressed);                    
                 } else if (name.equals("Down")){
+                        playerMoveListeners.notifyPlayerMove(myID, MoveDirection.DOWN, keyPressed);                                                
                 } else if (name.equals("Left")){
+                        playerMoveListeners.notifyPlayerMove(myID, MoveDirection.LEFT, keyPressed);                                                
                 } else if (name.equals("Right")){
+                        playerMoveListeners.notifyPlayerMove(myID, MoveDirection.RIGHT, keyPressed);
                 } else if (name.equals("RequestStart") && !keyPressed){
                     System.out.println("Enter pressed");
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            System.out.println("lol");
+                            System.out.println("Sending new start request");
                             client.sendRequestStartMessage();
                         }
                     }).start();
-                    
                 }
-               
             }
         };
     }
@@ -122,7 +125,7 @@ public class ClientModule extends SimpleApplication implements
 
     @Override
     public void addPlayerMoveListener(PlayerMoveListener playerMoveListener) {
-        playerMoveListeners.add(playerMoveListener);
+        this.playerMoveListeners = playerMoveListener;
     }  
 
     @Override
