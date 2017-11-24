@@ -9,14 +9,18 @@ import api.DiskState;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
  * @author ted
  */
 public class SetupInitiater {    
+    private static final Random RANDOM = new Random();
+    private static final float INIT_VELCOITY_MULTIPLIER = 5f;
     
     static final float PLAYER_COORD = GameConstants.PLAYER_COORD;
     static final float POSNEG_MAX_COORD = GameConstants.POSNEG_MAX_COORD;
@@ -90,6 +94,13 @@ public class SetupInitiater {
             pDisks.add(pDisk);
         }
         return pDisks;     
+    }
+    
+    public static void setInitSpeed(DiskImpl disk){
+        float xInit = (RANDOM.nextFloat() * 2 - 1) * INIT_VELCOITY_MULTIPLIER;
+        float yInit = (RANDOM.nextFloat() * 2 - 1) * INIT_VELCOITY_MULTIPLIER;
+        
+        disk.setVelocity(new Vector3f(xInit, yInit, 0));
     }
     
 }

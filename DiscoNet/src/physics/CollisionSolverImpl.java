@@ -8,8 +8,11 @@ package physics;
 import api.physics.CollisionResult;
 import api.physics.CollisionSolver;
 import api.physics.RigidBody;
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.List;
+import models.DiskImpl;
 
 /**
  *
@@ -59,6 +62,49 @@ public class CollisionSolverImpl implements CollisionSolver{
             bodyA.integrate(rewindTime);
             bodyB.integrate(rewindTime);
         }
+    }
+    
+    /**
+     * checks and adjusts disks velocity and position for a collision with a wall.
+     * @param d
+     * @param edgeSize 
+     * @return  
+     */
+    @Override
+    public boolean collisionWithWall(DiskImpl d, float edgeSize){
+        Vector3f pos = d.getLocalTranslation();
+        Vector3f v = d.getVelocity();
+        float radius = d.getRadius();
+        float maxDistance = edgeSize - radius;
+        boolean collision = false;
+        if (FastMath.abs(pos.x) > maxDistance){
+            // Collision with east/west wall
+            
+            d.setVelocity(new Vector3f(-v.x, v.y, 0));
+            float moveBack = FastMath.abs(pos.x) - maxDistance;
+            if (pos.x > 0){
+                // east wall
+                d.move(- moveBack, 0, 0);
+            }else {
+                // west wall
+                d.move(moveBack, 0, 0);
+            }
+            collision = true;
+        }
+        if (FastMath.abs(pos.y) > maxDistance) {
+            // collision with south/north wall
+            d.setVelocity(new Vector3f(v.x, - v.y, 0));
+            float moveBack = FastMath.abs(pos.y) - maxDistance;
+            if (pos.y > 0){
+                // north wall
+                d.move(0, - moveBack, 0);
+            }else {
+                // south wall
+                d.move(0, moveBack, 0);
+            }
+            collision = true;
+        }
+        return collision;
     }
     
 }
