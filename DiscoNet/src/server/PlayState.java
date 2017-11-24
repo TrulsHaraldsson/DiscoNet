@@ -19,6 +19,7 @@ import java.util.List;
 import models.DiskConverter;
 import models.DiskImpl;
 import models.PlayerDisk;
+import models.SetupInitiater;
 import physics.CollisionDetectorImpl;
 import physics.CollisionResultImpl;
 import physics.CollisionSolverImpl;
@@ -110,6 +111,11 @@ public class PlayState extends BaseAppState implements TimeEmitter{
         disks = app.getInitDisks();
         gameTime = 30.0f;
         timeSinceLastTimeUpdate = 1.0f;
+        for (DiskImpl disk : disks) {
+            if (!(disk instanceof PlayerDisk)) {
+                SetupInitiater.setInitSpeed(disk);
+            }
+        }
     }
 
     @Override
