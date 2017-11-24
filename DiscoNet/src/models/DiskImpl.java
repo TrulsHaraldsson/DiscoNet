@@ -21,7 +21,8 @@ import com.jme3.scene.Node;
 public abstract class DiskImpl extends Node implements Disk, RigidBody{
     
     private static final float MAX_SPEED = 300.0f;
-    private static final float FRICTION = 0.9985f;
+    //private static final float FRICTION = 0.9985f;
+    private static final float FRICTION_MULTIPLIER = 0.3f;
     
     private static int numberOfDisks = 0;
     
@@ -31,6 +32,8 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
     private final float radius;
     private final Geometry disk;
     private final int id;
+    
+    protected int points;
     
     private Vector3f velocity = new Vector3f(0.0f, 0.0f, 0.0f);
     protected Vector3f acceleration = new Vector3f(0.0f,0.0f, 0.0f);
@@ -66,7 +69,12 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
             velocity = velocity.normalize().scaleAdd(MAX_SPEED, Vector3f.ZERO);
         }
     }
-
+    
+    
+    /**
+     * calculates where the disk should be after tpf time.
+     * @param tpf 
+     */
     @Override
     public void integrate(float tpf) {
         Vector3f dV = new Vector3f(acceleration.x * tpf, acceleration.y * tpf, 0);
@@ -78,12 +86,14 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
         Vector3f t = new Vector3f(velocity.x * tpf, velocity.y * tpf, 0);
         // Calculate translation based on velocity
         
-        velocity.mult(FRICTION);
+        velocity.mult(1 - (FRICTION_MULTIPLIER * tpf));
         // Simulate friction by reducing velocity by some fraction
+        
         
         super.move(t);
         // Translate the position
     }
+    
     
     @Override
     public void translate(Vector3f offset){
@@ -124,5 +134,10 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
     @Override
     public void setAcceleration(Vector3f acceleration){
         this.acceleration = acceleration;
+    }
+    
+    @Override
+    public int getPoints(){
+        return this.points;
     }
 }

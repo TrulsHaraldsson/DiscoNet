@@ -24,4 +24,6 @@ public interface Disk {
     int reward();
     
     int getID();
+    
+    int getPoints();
 }

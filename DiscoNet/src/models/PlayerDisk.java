@@ -16,6 +16,7 @@ public class PlayerDisk extends DiskImpl{
     
     public PlayerDisk(Material material, int id) {
         super(GameConstants.PLAYER_R, material, id);
+        points = 0;
     }
 
     @Override
@@ -23,13 +24,17 @@ public class PlayerDisk extends DiskImpl{
         return 0;
     }
     
-    public void accelerateX(boolean pressed){
-        float a = (pressed) ? ACCELERATION_MULTIPLIER : - ACCELERATION_MULTIPLIER;
+    public void addPoints(int reward){
+        points += reward;
+    }
+    
+    public void accelerateX(boolean right){
+        float a = (right) ? ACCELERATION_MULTIPLIER : - ACCELERATION_MULTIPLIER;
         this.acceleration.addLocal(a, 0, 0);
     }
     
-    public void accelerateY(boolean pressed){
-        float a = (pressed) ? ACCELERATION_MULTIPLIER : - ACCELERATION_MULTIPLIER;
+    public void accelerateY(boolean up){
+        float a = (up) ? ACCELERATION_MULTIPLIER : - ACCELERATION_MULTIPLIER;
         this.acceleration.addLocal(0, a, 0);
     }
     

@@ -15,8 +15,8 @@ import network.ServerHandler;
 public class BootstrapServer {
     
     public static void main(String[] args){
-        ServerModule sm = new ServerModule();
         ServerHandler sh = new ServerHandler();
+        ServerModule sm = new ServerModule(sh);
         
         // Server handler emitts player moves to server
         sh.addPlayerMoveListener(sm.getPlayerMoveListener());
