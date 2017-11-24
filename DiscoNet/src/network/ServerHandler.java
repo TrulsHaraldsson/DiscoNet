@@ -206,8 +206,13 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         return this;
     }
     
-    public void broadcastDiskStates(List<DiskState> disks){
-        server.broadcast(new DiskStateMessage(disks));
+    public void broadcastDiskStates(final List<DiskState> disks){
+        new Thread(new Runnable(){
+            @Override
+            public void run(){
+                server.broadcast(new DiskStateMessage(disks));                
+            }
+        }).start();
     }
     
     public void startHeartBeat(){

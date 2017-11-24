@@ -71,6 +71,19 @@ public class PlayState extends BaseAppState {
         
     }
     
+    public DiskImpl getDisk(int id){
+        for(DiskImpl d : disks){
+            if(d.getID() == id){
+                return d;
+            }
+        }
+        return null; //Not found
+    }
+    
+    public List<DiskImpl> getDisks(){
+        return disks;
+    }
+    
     @Override
     protected void cleanup(Application app) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
