@@ -19,6 +19,7 @@ public class DiskState {
     private Vector3f velocity;
     private Vector3f acceleration;
     private int id;
+    private int points;
     
     public DiskState(){
     }
@@ -28,6 +29,7 @@ public class DiskState {
         this.velocity = d.getVelocity();
         this.acceleration = d.getAcceleration();
         this.id = d.getID();
+        this.points = d.getPoints();
     }
     
     public Vector3f getPosition(){

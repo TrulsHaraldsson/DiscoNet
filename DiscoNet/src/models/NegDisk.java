@@ -14,15 +14,15 @@ import com.jme3.math.ColorRGBA;
  */
 public class NegDisk extends DiskImpl{
     
-    private static final int REWARD = -3;
     
     public NegDisk(Material material, int id) {
         super(GameConstants.NEGDISK_R, material, id);
+        points = -3;
     }
 
     @Override
     public int reward() {
-        return REWARD;
+        return points;
     }
     
 }

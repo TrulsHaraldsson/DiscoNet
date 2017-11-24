@@ -5,12 +5,14 @@
  */
 package api.physics;
 
+import java.util.List;
+
 /**
  *
  * @author truls
  */
 public interface CollisionDetectionListener {
     
-    void onCollision(CollisionResult collision);
+    void onCollision(List<CollisionResult> collisions);
     
 }

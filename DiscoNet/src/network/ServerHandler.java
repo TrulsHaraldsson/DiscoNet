@@ -14,23 +14,19 @@ import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreListener;
 import api.TimeListener;
-import com.jme3.app.SimpleApplication;
 import com.jme3.network.Filters;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
-import com.jme3.network.serializing.Serializer;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import network.messages.DiskStateMessage;
 import network.messages.GameStateMessage;
 import network.messages.InitAckMessage;
 import network.messages.InitMessage;
@@ -48,6 +44,9 @@ import server.ServerModule;
  */
 public class ServerHandler implements MessageListener<HostedConnection>, PlayerMoveEmitter, GameStateListener, ScoreListener, TimeListener, DiskStateListener {
     private ServerModule serverModule;
+    
+    private Thread heartBeatThread;
+    private boolean playing = false;
     
     private Server server;
     
@@ -130,7 +129,10 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 }
             });
         } else if (m instanceof RequestStartMessage){
-            System.out.println("Initiating launch!");
+            List<DiskState> players = serverModule.getPlayerDiskStates();
+            InitMessage im = new InitMessage(players);
+            server.broadcast(im);
+            /*
             Future<List<DiskState>> result = serverModule.enqueue(new Callable(){
                 @Override
                 public Object call() throws Exception{
@@ -143,7 +145,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 server.broadcast(Filters.equalTo(source), im);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
-            }
+            }*/
             System.out.println("Init message broadcasted.");
         } else if (m instanceof InitAckMessage){
             System.out.println("Source : " + source);
@@ -202,6 +204,42 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
 
     public ScoreListener getScoreListener() {
         return this;
+    }
+    
+    public void broadcastDiskStates(List<DiskState> disks){
+        server.broadcast(new DiskStateMessage(disks));
+    }
+    
+    public void startHeartBeat(){
+        playing = true;
+        heartBeatThread = new Thread(new HeartBeatSender());
+        heartBeatThread.start();
+    }
+    
+    public void stopHeartBeat(){
+        playing = false;
+    }
+    
+    /**
+     * Sends out a heart beat to all clients every TIME_SLEEPING seconds.
+     */
+    private class HeartBeatSender implements Runnable {
+
+        private final int TIME_SLEEPING = 100; // timebetween heartbeats
+
+        @Override
+        @SuppressWarnings("SleepWhileInLoop")
+        public void run() {
+            while (playing) { //TODO: Swith to check playState.isEnabled? 
+                try {
+                    Thread.sleep(TIME_SLEEPING);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                DiskStateMessage m = new DiskStateMessage(serverModule.getDiskStates());
+                server.broadcast(m);
+            }
+        }
     }
     
 }
