@@ -61,4 +61,12 @@ public class PosDisk extends DiskImpl{
         }
     }
     
+    @Override
+    public void setPoints(int points){
+        for(int i = this.points; i > points; i--){
+            super.detachChildNamed("dot" + i);
+        }
+        this.points = points;
+    }
+    
 }

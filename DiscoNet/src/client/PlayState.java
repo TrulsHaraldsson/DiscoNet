@@ -110,6 +110,7 @@ public class PlayState extends BaseAppState implements DiskStateListener{
                     disk.setPosition(diskState.getPosition());
                     disk.setVelocity(diskState.getVelocity());
                     disk.setAcceleration(diskState.getAcceleration());
+                    disk.setPoints(diskState.getPoints());
                 }
             }
         }

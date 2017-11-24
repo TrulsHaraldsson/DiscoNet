@@ -140,4 +140,8 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
     public int getPoints(){
         return this.points;
     }
+    
+    public void setPoints(int points){
+        this.points = points;
+    }
 }

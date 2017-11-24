@@ -47,4 +47,8 @@ public class DiskState {
     public int getID(){
         return id;
     }
+    
+    public int getPoints(){
+        return points;
+    }
 }

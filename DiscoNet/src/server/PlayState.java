@@ -78,9 +78,10 @@ public class PlayState extends BaseAppState implements TimeEmitter{
             } else if (d2 instanceof PlayerDisk){
                 ((PlayerDisk)d2).addPoints(d1.reward());
             }
-            disks.add(d1);
-            disks.add(d2);
+            collidedDisks.add(d1);
+            collidedDisks.add(d2);
         }
+        
         // notify network a collision occured
         app.afterCollisions(collidedDisks);
         
