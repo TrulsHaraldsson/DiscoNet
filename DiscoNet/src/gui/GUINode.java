@@ -27,8 +27,13 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     private BitmapText txtTime;
     private BitmapText txtSetupText;
     private BitmapText txtPlayerHint;
+    
+    // Used to make animations
     private float animationTime = 0.0f;
+    
+    // Used to display Time
     private float gameTime = 0.0f;
+    
     private GameState state;
     
     public void initGUI(AssetManager assetManager, AppSettings appSettings){

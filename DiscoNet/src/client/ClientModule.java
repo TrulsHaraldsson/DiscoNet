@@ -16,6 +16,7 @@ import api.PlayerMoveEmitter;
 import api.PlayerMoveListener;
 import api.ScoreListener;
 import api.TimeListener;
+import com.jme3.app.LostFocusBehavior;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Quaternion;
@@ -162,6 +163,7 @@ public class ClientModule extends SimpleApplication implements
         
         idProvider.requestID(this);
         
+        super.setLostFocusBehavior(LostFocusBehavior.Disabled);
     }
     
     @Override
