@@ -46,6 +46,11 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     private ArrayList<Integer> ready = new ArrayList<>();
     
     private GameStateListener gameStateListener;
+    private TimeListener timeListener;
+    
+    private float gameTime = 0.0f;
+    private float notifyGameTimeInterval = 1.0f;
+    private float timeSinceLastTimeUpdate = 0.0f;
     
     /**
      * Creates a player disk and gives it a id.
@@ -85,13 +90,25 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
 
     @Override
     public void addTimeListener(TimeListener timeListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.timeListener = timeListener;
     }
 
     @Override
     public void simpleInitApp() {
         disks = new ArrayList();
         players = new ArrayList();
+    }
+    
+    @Override
+    public void simpleUpdate(float tpf){
+        gameTime += tpf;
+        
+        timeSinceLastTimeUpdate += tpf;
+        if(timeSinceLastTimeUpdate > notifyGameTimeInterval){
+            timeListener.notifyTime(gameTime);
+            timeSinceLastTimeUpdate = 0.0f;
+        }
+        
     }
 
     PlayerMoveListener getPlayerMoveListener() {

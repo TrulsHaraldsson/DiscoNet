@@ -38,6 +38,7 @@ import network.messages.JoinAckMessage;
 import network.messages.JoinMessage;
 import network.messages.PlayerMoveMessage;
 import network.messages.RequestStartMessage;
+import network.messages.TimeMessage;
 import server.ServerModule;
 
 /**
@@ -176,7 +177,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
 
     @Override
     public void notifyTime(float time) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        server.broadcast(new TimeMessage(time));
     }
 
     @Override
