@@ -28,7 +28,7 @@ public class SetupState extends BaseAppState{
     private final Random random = new Random();
     List<DiskImpl> disks;
     List<PlayerDisk> players;
-    List<Integer> occupiedPositions = new ArrayList<>();
+    List<Integer> occupiedPositions;
     
     @Override
     protected void initialize(Application app) {
@@ -92,6 +92,7 @@ public class SetupState extends BaseAppState{
     protected void onEnable() {
         disks = new ArrayList();
         players = new ArrayList(); 
+        occupiedPositions = new ArrayList();
     }
 
     /**

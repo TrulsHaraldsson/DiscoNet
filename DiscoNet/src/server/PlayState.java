@@ -117,7 +117,7 @@ public class PlayState extends BaseAppState implements TimeEmitter{
     @Override
     protected void onEnable() {
         disks = app.getInitDisks();
-        gameTime = 30.0f;
+        gameTime = GameConstants.GAME_TIME;
         timeSinceLastTimeUpdate = 1.0f;
         for (DiskImpl disk : disks) {
             if (!(disk instanceof PlayerDisk)) {

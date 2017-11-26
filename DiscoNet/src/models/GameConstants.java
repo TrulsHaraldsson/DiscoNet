@@ -32,6 +32,8 @@ public class GameConstants {
     public static final float NEGDISK_R = 16f; // radius of a negative disk
     
     public static final int MAX_PLAYERS = 9;
+    public static final float GAME_TIME = 30.0f;
+    
     
     // positions for the players.
     public static Vector3f[] PLAYER_POSITIONS = {new Vector3f(PLAYER_COORD, PLAYER_COORD, 0), new Vector3f(0, PLAYER_COORD, 0),

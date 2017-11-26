@@ -33,7 +33,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     private float animationTime = 0.0f;
     
     // Used to display Time
-    private float gameTime = 0.0f;
+    private float gameTime = GameConstants.GAME_TIME;
     
     private GameState state;
     
@@ -78,6 +78,9 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
             txtPlayerHint.setAlpha(FastMath.abs(FastMath.sin(animationTime/0.5f)));
         }else if( state == GameState.PLAY){
             gameTime -= tpf;
+            if (gameTime < 0) {
+                gameTime = 0;
+            }
             notifyTime(gameTime);
         }
     }

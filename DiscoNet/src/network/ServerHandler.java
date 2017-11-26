@@ -151,7 +151,9 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
 
     @Override
     public void notifyGameState(GameState state) {
-        server.broadcast(new GameStateMessage(state));
+        if(state != GameState.SETUP){
+            server.broadcast(new GameStateMessage(state));
+        }
         if (state == GameState.PLAY) {
             startHeartBeat();
         }
