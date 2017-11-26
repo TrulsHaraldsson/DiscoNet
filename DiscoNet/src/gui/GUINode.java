@@ -28,6 +28,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     private BitmapText txtTime;
     private BitmapText txtSetupText;
     private BitmapText txtPlayerHint;
+    private BitmapText txtEnd;
     
     // Used to make animations
     private float animationTime = 0.0f;
@@ -64,6 +65,12 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
         scaleProperlyToWindowSize(txtPlayerHint, width, charsetRenderSize);
         txtPlayerHint.setLocalTranslation(appSettings.getWidth()*0.5f - txtPlayerHint.getLineWidth() / 2.0f, 
                 appSettings.getHeight()*0.30f + txtPlayerHint.getLineHeight() / 2.0f, 0);
+        
+        txtEnd = new BitmapText(guiFont, false);
+        txtEnd.setText("PRESS ENTER TO TRY AND\nJOIN AGAIN");
+        scaleProperlyToWindowSize(txtEnd, width, charsetRenderSize);
+        txtEnd.setLocalTranslation(appSettings.getWidth()*0.5f - txtEnd.getLineWidth() / 2.0f, 
+                appSettings.getHeight()*0.50f + txtEnd.getLineHeight() / 2.0f, 0);
     }
     
     private void scaleProperlyToWindowSize(BitmapText text, float widthWindow, float charsetRenderSize){
@@ -78,9 +85,6 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
             txtPlayerHint.setAlpha(FastMath.abs(FastMath.sin(animationTime/0.5f)));
         }else if( state == GameState.PLAY){
             gameTime -= tpf;
-            if (gameTime < 0) {
-                gameTime = 0;
-            }
             notifyTime(gameTime);
         }
     }
@@ -88,6 +92,9 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     @Override
     public void notifyTime(float time) {
         gameTime = time;
+        if (gameTime < 0) {
+            gameTime = 0;
+        }
         int sec = (int) (time % 100f);
         int hundreds = (int) (time * 100f) % 100;
         
@@ -119,12 +126,16 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
                 super.detachChild(txtPlayerHint);
                 break;
             case END:
+                super.detachChild(txtSetupText);
+                super.detachChild(txtPlayerHint);
+                super.attachChild(txtEnd);
                 break;
             case SETUP:
                 super.attachChild(txtSetupText);
                 super.attachChild(txtPlayerHint);
                 super.detachChild(txtTime);
                 super.detachChild(txtPoint);
+                super.detachChild(txtEnd);
                 txtPlayerHint.setAlpha(1f);
                 break;
         } 

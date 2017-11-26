@@ -42,6 +42,9 @@ public class SetupState extends BaseAppState{
      */
     public int initId(){
         int id = players.size();
+        if (id >= GameConstants.MAX_PLAYERS){
+            return -1;
+        }
         // Get random pos for available positions
         int pos = random.nextInt(GameConstants.MAX_PLAYERS);
         while (occupiedPositions.contains(pos)){
@@ -93,6 +96,7 @@ public class SetupState extends BaseAppState{
         disks = new ArrayList();
         players = new ArrayList(); 
         occupiedPositions = new ArrayList();
+        app.clearConnections();
     }
 
     /**

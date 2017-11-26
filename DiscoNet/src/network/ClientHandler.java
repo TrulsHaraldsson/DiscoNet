@@ -7,6 +7,7 @@ package network;
 
 import api.DiskStateEmitter;
 import api.DiskStateListener;
+import api.GameState;
 import api.GameStateEmitter;
 import api.GameStateListener;
 import api.IDProvider;
@@ -111,17 +112,25 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
             if (joinAckMessage.getJoined()){
                 idRequester.setID(joinAckMessage.getID());  
-            }            
+            } else {
+                gameStateListener.enqueue(new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    gameStateListener.notifyGameState(GameState.END);
+                    return true;
+                }
+            });
+            }
             idRequester = null;
         } else if (m instanceof GameStateMessage){
-            System.out.println("State received: " + ((GameStateMessage) m).getGameState());
             gameStateListener.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {
-                    gameStateListener.notifyGameState(((GameStateMessage) m).getGameState());
+                    gameStateListener.notifyGameState(((GameStateMessage)m).getGameState());
                     return true;
                 }
-            });                     
+            });
+                                 
         } else if(m instanceof InitMessage){
             //Respond to server with own id
             System.out.println(((InitMessage) m).toString());

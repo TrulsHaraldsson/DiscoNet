@@ -46,7 +46,7 @@ public class ClientModule extends SimpleApplication implements
     
     protected int myID;
     
-    private IDProvider idProvider;
+    private final IDProvider idProvider;
     
     public ClientModule(IDProvider idProvider, ClientHandler ch){
         this.idProvider = idProvider;
@@ -79,6 +79,10 @@ public class ClientModule extends SimpleApplication implements
                             client.sendRequestStartMessage();
                         }
                     }).start();
+                } else if (name.equals("Join") && !keyPressed){
+                    // send join message again.
+                    idProvider.requestID(ClientModule.this);
+                    notifyGameState(GameState.SETUP);
                 }
             }
         };
@@ -187,5 +191,17 @@ public class ClientModule extends SimpleApplication implements
     @Override
     public void simpleUpdate(float tpf) {
         gui.update(tpf);
+    }
+    
+    public synchronized GameState getCurrentState(){
+        if (setupState.isEnabled()) {
+            return GameState.SETUP;
+        } else if (playState.isEnabled()) {
+            return GameState.PLAY;
+        } else if (endState.isEnabled()) {
+            return GameState.END;
+        } else {
+            return null;
+        }
     }
 }

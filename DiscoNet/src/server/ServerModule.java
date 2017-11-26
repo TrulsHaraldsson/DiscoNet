@@ -35,6 +35,12 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         TimeEmitter, TimeListener, PlayerMoveListener, IDProvider {
     
     private final List<DiskStateListener> diskStateListeners = new ArrayList<>();
+    private final List<GameStateListener> gameStateListeners = new ArrayList<>();
+    
+    private ArrayList<Integer> connections = new ArrayList<>();
+    private ArrayList<Integer> ready = new ArrayList<>();
+    
+    
     
     private final PlayState playState;
     private final EndState endState;
@@ -47,10 +53,11 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         endState = new EndState();
     }
     
-    private ArrayList<Integer> connections = new ArrayList<>();
-    private ArrayList<Integer> ready = new ArrayList<>();
     
-    private List<GameStateListener> gameStateListeners = new ArrayList<>();
+    public void clearConnections(){
+        connections.clear();
+        ready.clear();
+    }
     
     /**
      * Creates a player disk and gives it a id.
@@ -58,7 +65,11 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
      * @return 
      */
     public int initId(){
-        return setupState.initId();
+        if (setupState.isEnabled()) {
+            return setupState.initId();
+        } else {
+            return -1;
+        }
     }
     
     public List<DiskImpl> getInitDisks(){
@@ -181,6 +192,10 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
         }
     }
     
+    public void onPlayersReady(){
+        changeGameState(GameState.PLAY);
+    }
+    
     public void onPlayerJoined(int id){
         if(!connections.contains(id)){
             System.out.println("Player joined id " + id);
@@ -192,8 +207,9 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     @Override
     public void notifyTime(float time) {
         if (time <= 0) {
-            changeGameState(GameState.END);
+            changeGameState(GameState.END); // Currently does nothing.
             System.out.println("Time is over!");
+            changeGameState(GameState.SETUP);
         }
     }
     
