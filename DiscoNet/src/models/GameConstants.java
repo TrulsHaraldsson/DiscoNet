@@ -49,6 +49,6 @@ public class GameConstants {
     };
     // Matching names
     public static final String[] PLAYER_NAMES = {
-        "Blue", "Black", "Yellow", "Orange", "Cyan", "DGray", "Pink", "Brown", "LGray"
+        "BLUE", "BLACK", "YELLOW", "ORAMGE", "CYAN", "DGRAY", "PINK", "BROWN", "LGRAY"
     };
 }
