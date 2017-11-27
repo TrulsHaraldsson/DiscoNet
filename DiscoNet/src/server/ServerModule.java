@@ -77,6 +77,7 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     }
     
     private void changeGameState(GameState newState){
+        notifyGameStateListeners(newState);
         switch(newState){
             case SETUP:
                 playState.setEnabled(false);
@@ -96,7 +97,6 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
             default:
                 break;
         }
-        notifyGameStateListeners(newState);
     }
     
     @Override

@@ -58,6 +58,7 @@ public class SetupInitiater {
         List<PlayerDisk> players = new ArrayList<>();
         for (int i = 0; i< diskStates.size(); i++) {
             DiskState player = diskStates.get(i);
+            System.out.println("ID = " + player.getID());
             Material m = setupMaterial(assetManager, GameConstants.PLAYER_COLORS[player.getID()]);
             PlayerDisk p = new PlayerDisk(m, player.getID());
             p.setLocalTranslation(player.getPosition());

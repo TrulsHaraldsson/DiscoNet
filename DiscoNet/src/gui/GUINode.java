@@ -57,7 +57,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
         txtTime.setLocalTranslation(appSettings.getWidth()*0.01f, appSettings.getHeight()*0.95f, 0);
         
         txtPoint = new BitmapText(guiFont, false);
-        txtPoint.setText("POINTS:");
+        txtPoint.setText("");
         scaleProperlyToWindowSize(txtPoint, width, charsetRenderSize);
         txtPoint.setLocalTranslation(appSettings.getWidth()*0.01f, appSettings.getHeight()*0.80f, 0);
         
@@ -143,6 +143,8 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
                 if(winner != null){
                     setWinnerText();
                     super.detachChild(txtSetupText);
+                    super.detachChild(txtTime);
+                    super.detachChild(txtPoint);
                     super.attachChild(txtWinner);
                     super.attachChild(txtPlayerHint);
                 }else {
