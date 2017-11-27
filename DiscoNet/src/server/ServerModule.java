@@ -154,9 +154,10 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     public void notifyPlayerMove(int diskID, MoveDirection direction, boolean isPressed) {
         PlayerDisk disk = (PlayerDisk)this.playState.getDisk(diskID);
         disk.accelerate(direction, isPressed); 
-        ArrayList<DiskImpl> list = new ArrayList<>();
-        list.add(disk);
-        notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(list));
+        //ArrayList<DiskImpl> list = new ArrayList<>();
+        //list.add(disk);
+        
+        notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(this.playState.getDisks()));
     }
 
     @Override
@@ -178,7 +179,7 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     
     public void afterCollisions(final List<DiskImpl> disks) {
         if (disks.size() > 0) {
-            notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(disks)); 
+            notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(this.playState.getDisks())); 
         }  
     }
     

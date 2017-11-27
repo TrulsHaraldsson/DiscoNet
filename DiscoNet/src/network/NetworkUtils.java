@@ -25,7 +25,7 @@ import network.messages.TimeMessage;
 public class NetworkUtils {
     static final int SERVER_PORT = 7999;
     
-    static final String SERVER_HOSTNAME = "localhost";
+    static final String SERVER_HOSTNAME = "localhost"; //"130.240.109.129"; //"localhost";
     
     public static void initSerializables(){
         // TODO: register for all new message types

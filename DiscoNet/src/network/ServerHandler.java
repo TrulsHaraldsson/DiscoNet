@@ -186,7 +186,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 hosts = getFilteredHosts(predicate);
                 setAttributes(hosts, GAME_STATE_ATTRIBUTE, state);
                 server.broadcast(Filters.in(hosts) , new GameStateMessage(state));
-                startHeartBeat();
+                //startHeartBeat();
                 break;
             case END:
                 predicate = p -> p.getAttribute(GAME_STATE_ATTRIBUTE) != GameState.PLAY;
