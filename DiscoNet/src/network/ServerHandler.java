@@ -124,14 +124,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 joinAckMessage = new JoinAckMessage(-1, false);
                 source.setAttribute(GAME_STATE_ATTRIBUTE, GameState.END);
             }
-            // TODO: maybe remove this if states work good.
-            /*serverModule.enqueue(new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    serverModule.onPlayerJoined(result.get());
-                    return true;
-                }
-            });*/
             
             server.broadcast(Filters.equalTo(source), joinAckMessage);    
             
@@ -147,7 +139,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         } else if (m instanceof RequestStartMessage){
             List<DiskState> players = serverModule.getPlayerDiskStates();
             InitMessage im = new InitMessage(players);
-            //server.broadcast(im);
             Predicate<HostedConnection> predicate = p -> p.getAttribute(GAME_STATE_ATTRIBUTE) != GameState.SETUP;
             List<HostedConnection> validConnections = getFilteredHosts(predicate);
             server.broadcast(Filters.in(validConnections), im);
@@ -169,14 +160,6 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 });
             }
             
-            // TODO: Remove if states work good.
-            /*serverModule.enqueue(new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    serverModule.onPlayerReady(((InitAckMessage) m).getID());
-                    return true;
-                }
-            });*/
         }
     }
     
@@ -208,9 +191,9 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
             case END:
                 predicate = p -> p.getAttribute(GAME_STATE_ATTRIBUTE) != GameState.PLAY;
                 hosts = getFilteredHosts(predicate);
+                Collection allHosts = server.getConnections();
                 setAttributes(hosts, GAME_STATE_ATTRIBUTE, state);
                 server.broadcast(Filters.in(hosts) , new GameStateMessage(state));
-                server.broadcast(new GameStateMessage(state));
                 break;
             case SETUP:
                 setAttributes(server.getConnections(), INIT_STATUS_ATTRIBUTE, InitStatus.NOTHING);
@@ -236,6 +219,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         System.out.println("ServerHandler time = " + time);
         Predicate<HostedConnection> predicate = p -> p.getAttribute(GAME_STATE_ATTRIBUTE) != GameState.PLAY;
         Collection hosts = getFilteredHosts(predicate);
+
         server.broadcast(Filters.in(hosts), new TimeMessage(time));
     }
 
@@ -295,8 +279,11 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                
+                Predicate<HostedConnection> predicate = p -> p.getAttribute(GAME_STATE_ATTRIBUTE) != GameState.PLAY;
+                Collection hosts = getFilteredHosts(predicate);
                 DiskStateMessage m = new DiskStateMessage(serverModule.getDiskStates());
-                server.broadcast(m);
+                server.broadcast(Filters.in(hosts), m);
             }
         }
     }

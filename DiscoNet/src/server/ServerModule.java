@@ -177,7 +177,9 @@ public class ServerModule extends SimpleApplication implements GameStateEmitter,
     }
     
     public void afterCollisions(final List<DiskImpl> disks) {
-        notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(disks));   
+        if (disks.size() > 0) {
+            notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(disks)); 
+        }  
     }
     
     public void onPlayerReady(int id){

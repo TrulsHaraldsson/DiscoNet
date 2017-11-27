@@ -109,6 +109,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
     @Override
     public void messageReceived(Client source, final Message m) {
         if(m instanceof JoinAckMessage){
+            //System.out.println("Message received: JoinAck");
             JoinAckMessage joinAckMessage = (JoinAckMessage) m;
             if (joinAckMessage.getJoined()){
                 idRequester.setID(joinAckMessage.getID());  
@@ -123,6 +124,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             }
             idRequester = null;
         } else if (m instanceof GameStateMessage){
+            //System.out.println("Message received: GameState");
             gameStateListener.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {
@@ -133,8 +135,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
                                  
         } else if(m instanceof InitMessage){
             //Respond to server with own id
-            System.out.println(((InitMessage) m).toString());
-            System.out.println("init players received id: " + ((InitMessage)m).getPlayers().get(0).getID());
+            //System.out.println(((InitMessage) m).toString());
             Future<Integer> result = diskStateListener.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {
@@ -153,6 +154,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             
             
         } else if (m instanceof DiskStateMessage){
+            //System.out.println("Message received: DiskState");
             diskStateListener.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {
@@ -162,6 +164,7 @@ public class ClientHandler implements GameStateEmitter, DiskStateEmitter, ScoreE
             });
             
         } else if(m instanceof TimeMessage){
+            //System.out.println("Message received: Time");
             timeListener.enqueue(new Callable() {
                 @Override
                 public Object call() throws Exception {
