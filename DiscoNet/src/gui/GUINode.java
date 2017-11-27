@@ -85,6 +85,9 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
             txtPlayerHint.setAlpha(FastMath.abs(FastMath.sin(animationTime/0.5f)));
         }else if( state == GameState.PLAY){
             gameTime -= tpf;
+            if(gameTime <= 0){
+                gameTime = 0;
+            }
             notifyTime(gameTime);
         }
     }
@@ -92,9 +95,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
     @Override
     public void notifyTime(float time) {
         gameTime = time;
-        if (gameTime < 0) {
-            gameTime = 0;
-        }
+        
         int sec = (int) (time % 100f);
         int hundreds = (int) (time * 100f) % 100;
         
@@ -129,6 +130,7 @@ public class GUINode extends Node implements TimeListener, ScoreListener, GameSt
                 super.detachChild(txtSetupText);
                 super.detachChild(txtPlayerHint);
                 super.attachChild(txtEnd);
+                notifyTime(0);
                 break;
             case SETUP:
                 super.attachChild(txtSetupText);

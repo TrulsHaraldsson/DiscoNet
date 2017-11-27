@@ -268,7 +268,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
         new Thread(new Runnable(){
             @Override
             public void run(){
-                Predicate<HostedConnection> predicate = p -> p.getAttribute(GAME_STATE_ATTRIBUTE) == GameState.END;
+                Predicate<HostedConnection> predicate = p -> p.getAttribute(GAME_STATE_ATTRIBUTE) != GameState.PLAY;
                 Collection hosts = getFilteredHosts(predicate);
                 server.broadcast(Filters.in(hosts), new DiskStateMessage(disks));                
             }
