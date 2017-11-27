@@ -125,6 +125,7 @@ public class PlayState extends BaseAppState implements TimeEmitter{
             }
         }
         
+        //app.notifyDiskStateListeners(DiskConverter.convertDisksToDiskStates(disks));
     }
 
     @Override

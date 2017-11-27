@@ -268,7 +268,7 @@ public class ServerHandler implements MessageListener<HostedConnection>, PlayerM
      */
     private class HeartBeatSender implements Runnable {
 
-        private final int TIME_SLEEPING = 100; // timebetween heartbeats
+        private final int TIME_SLEEPING = 16; // timebetween heartbeats
 
         @Override
         @SuppressWarnings("SleepWhileInLoop")
