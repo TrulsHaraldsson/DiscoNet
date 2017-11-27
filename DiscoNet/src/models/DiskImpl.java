@@ -81,6 +81,9 @@ public abstract class DiskImpl extends Node implements Disk, RigidBody{
         // Calculate a delta velocity based on acceleration
         
         velocity.addLocal(dV);
+        if (velocity.length() > MAX_SPEED) {
+            velocity = velocity.normalize().scaleAdd(MAX_SPEED, Vector3f.ZERO);
+        }
         // Add delta velocity to current velocity
         
         Vector3f t = new Vector3f(velocity.x * tpf, velocity.y * tpf, 0);
