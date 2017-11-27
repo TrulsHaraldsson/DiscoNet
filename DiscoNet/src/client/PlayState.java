@@ -9,6 +9,8 @@ import api.DiskState;
 import api.DiskStateListener;
 import api.ScoreEmitter;
 import api.ScoreListener;
+import api.models.Disk;
+import api.physics.CollisionResult;
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.KeyInput;
@@ -20,7 +22,10 @@ import java.util.List;
 import java.util.Map;
 import models.BoardImpl;
 import models.DiskImpl;
+import models.GameConstants;
 import models.PlayerDisk;
+import physics.CollisionDetectorImpl;
+import physics.CollisionSolverImpl;
 
 /**
  *
@@ -28,6 +33,9 @@ import models.PlayerDisk;
  */
 public class PlayState extends BaseAppState implements DiskStateListener, ScoreEmitter{
     private final List<ScoreListener> scoreListeners = new ArrayList<>();
+    
+    private CollisionDetectorImpl collisionDetectorImpl = new CollisionDetectorImpl();
+    private CollisionSolverImpl collisionSolverImpl = new CollisionSolverImpl();
     
     private ClientModule app;
     
@@ -87,6 +95,13 @@ public class PlayState extends BaseAppState implements DiskStateListener, ScoreE
     public void update(float tpf){
         for(DiskImpl disk : disks){
             disk.integrate(tpf);
+        }
+        
+        List<CollisionResult> collisions = collisionDetectorImpl.getCollisions((List<Disk>)(List<?>) disks, tpf);
+        collisionSolverImpl.resolveCollisions(collisions, tpf);
+        
+        for(DiskImpl disk : disks){
+            collisionSolverImpl.collisionWithWall(disk, GameConstants.FREE_AREA_WIDTH/2f);
         }
     }  
     
